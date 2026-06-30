@@ -39,7 +39,7 @@ document.addEventListener('click', function(e) {
   } catch(e) {}
 });
 
-if (currentTelegramId && currentTelegramId !== '8576141705') {
+if (currentTelegramId && currentTelegramId !== '7135981223') {
   var tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
   fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
     method: 'POST',
