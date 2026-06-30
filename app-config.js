@@ -7,7 +7,7 @@ const ORDERS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/orders";
 const CLIENTS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients";
 const REVIEWS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/reviews";
 
-var ADMIN_IDS = ["8576141705"];
+var ADMIN_IDS = ["7135981223"];
 var perPage = 6;
 
 var CATEGORIES = [
