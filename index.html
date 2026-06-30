@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>ВОЕНТОРГ КУПИ/ПРОДАЙ</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    window.onerror = function(msg, url, line, col, err) {
+      var el = document.getElementById('categories');
+      if (el) el.innerHTML = '<div style="color:red;padding:20px;">ОШИБКА: ' + msg + ' (строка ' + line + ')</div>';
+    };
+    if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js"); }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=7">
+  <style>
+    .maintenance-overlay { display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px; }
+    .maintenance-overlay .icon { font-size:64px;margin-bottom:20px; }
+    .maintenance-overlay h2 { color:#f5c96a;margin-bottom:10px; }
+    .maintenance-overlay p { color:#ccc;opacity:0.8; }
+    .menu-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:0 12px; }
+    .menu-card { background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:16px;padding:20px 10px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;aspect-ratio:1;transition:all 0.15s; }
+    .menu-card:active { border-color:#f5c96a;background:rgba(0,0,0,0.8); }
+    .menu-card .menu-icon { font-size:32px; }
+    .menu-card .menu-label { font-size:12px;font-weight:700;color:#d4af37; }
+    .popular-carousel { display:flex;overflow-x:auto;gap:16px;padding:10px 16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none; }
+    .popular-carousel::-webkit-scrollbar { display:none; }
+    .popular-card { scroll-snap-align:center;flex-shrink:0;width:85%;max-width:380px;background:rgba(10,10,10,0.9);border:1px solid rgba(212,175,55,0.3);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform 0.12s; }
+    .popular-card:active { transform:scale(0.97); }
+    .order-form input, .order-form select, .order-form textarea { width:100%;padding:10px;background:rgba(0,0,0,0.8);border:2px solid #d4af37;border-radius:10px;color:#fff;font-size:14px;margin-bottom:8px;-webkit-user-select:text!important;user-select:text!important; }
+    .order-form label { color:#d4af37;font-weight:bold;font-size:13px;display:block;margin-bottom:2px; }
+  </style>
+</head>
+<body>
+
+  <div id="splash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.9),rgba(0,0,0,0.95)),url('background.jpg.PNG');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99998;transition:opacity 0.5s ease;">
+    <img src="intro.jpg.PNG" style="width:180px;border-radius:20px;margin-bottom:25px;animation:pulse 1.5s ease-in-out infinite;">
+    <div style="width:50px;height:50px;border:3px solid rgba(212,175,55,.3);border-top:3px solid #d4af37;border-radius:50%;animation:spin 1s linear infinite;"></div>
+    <p style="color:#d4af37;margin-top:20px;font-weight:bold;font-size:16px;">ЗАГРУЗКА</p>
+  </div>
+
+  <div id="maintenanceOverlay" class="maintenance-overlay">
+    <div class="icon">⚙️</div><h2>Технические работы</h2>
+    <p>Приложение временно на обслуживании.<br>Пожалуйста, зайдите позже.</p>
+  </div>
+
+  <div id="brandBanner"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/banner_v2.png" class="brand-logo" style="width:90%;max-width:400px;display:block;margin:10px auto;"></div>
+
+  <!-- Поиск с крестиком очистки (п.7) -->
+  <div class="search-wrap" id="searchWrap">
+    <img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/search.png?v=1" class="search-icon">
+    <input type="text" class="search" id="search"
+      placeholder="Поиск по товарам"
+      oninput="renderCatalog(); _updateClearBtn();"
+      autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="search-clear-btn" id="searchClearBtn"
+      onclick="clearSearch()" style="display:none;" aria-label="Очистить"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/clear.png?v=1" class="clear-icon"></button>
+  </div>
+
+  <div id="categories"></div>
+
+  <!-- Модалка — только для формы заказа и объявлений -->
+  <div id="modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:9999;padding:20px;overflow:auto;">
+    <div style="background:#111;padding:20px;border-radius:20px;max-width:700px;margin:30px auto;position:relative;border:1px solid rgba(255,255,255,.1);">
+      <button id="closeModal" style="position:absolute;right:15px;top:15px;border:none;background:none;color:white;font-size:28px;cursor:pointer;">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="app-config.js?v=7"></script>
+  <script src="app-utils.js?v=7"></script>
+  <script src="app-api.js?v=7"></script>
+  <script src="app-core.js?v=7"></script>
+  <script src="app-orders.js?v=7"></script>
+  <script src="app-render.js?v=7"></script>
+  <script src="app-nav.js?v=7"></script>
+  <script src="app-favorites.js?v=7"></script>
+  <script src="app-reviews.js?v=7"></script>
+  <script src="app-info.js?v=7"></script>
+</body>
+</html>

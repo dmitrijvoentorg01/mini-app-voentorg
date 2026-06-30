@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>АДМИН • ВОЕНТОРГ</title>
+  <link rel="stylesheet" href="style.css?v=9999">
+  <style>
+    body { background:#0a0a0a; color:#fff; font-family:-apple-system,BlinkMacSystemFont,sans-serif; max-width:480px; margin:0 auto; min-height:100vh; padding:0 0 80px; -webkit-tap-highlight-color:transparent; }
+    .admin-header { text-align:center; padding:16px; border-bottom:2px solid #d4af37; position:sticky; top:0; background:#0a0a0a; z-index:10; }
+    .admin-header h1 { font-size:20px; color:#f5c96a; margin:0; }
+    .back-btn { display:inline-flex; align-items:center; justify-content:center; margin:10px; cursor:pointer; }
+    .admin-grid { display:flex; flex-wrap:wrap; gap:10px; padding:10px; }
+    .admin-card { background:rgba(0,0,0,0.6); border:2px solid #d4af37; border-radius:16px; padding:18px 12px; cursor:pointer; text-align:center; width:47%; flex-grow:1; }
+    .admin-card:active { border-color:#f5c96a; background:rgba(0,0,0,0.8); }
+    .list-item { background:#0a0a0a; border:1px solid #d4af37; border-radius:12px; padding:12px; margin:0 10px 8px; }
+    .action-btn { padding:8px 14px; background:#000; color:#d4af37; border:1px solid #d4af37; border-radius:8px; cursor:pointer; font-size:12px; font-weight:bold; margin:2px; }
+    .action-btn.green { color:#4caf50; border-color:#4caf50; }
+    .action-btn.red { color:#e53935; border-color:#e53935; }
+    .action-btn.blue { color:#2196F3; border-color:#2196F3; }
+    .form-input, .form-select, .form-textarea { width:100%; padding:12px; background:rgba(0,0,0,0.8); border:2px solid #d4af37; border-radius:10px; color:#fff; font-size:15px; margin-bottom:12px; outline:none; font-family:-apple-system,BlinkMacSystemFont,sans-serif; -webkit-appearance:none; box-sizing:border-box; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:#f5c96a; box-shadow:0 0 10px rgba(245,201,106,0.2); }
+    .form-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
+    .form-textarea { min-height:80px; resize:vertical; }
+    .form-label { color:#d4af37; font-weight:bold; font-size:13px; display:block; margin-bottom:4px; }
+    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); z-index:9999; padding:20px; overflow:auto; }
+    .modal-box { background:#111; padding:20px; border-radius:20px; max-width:500px; margin:30px auto; border:1px solid rgba(255,255,255,.1); position:relative; }
+    .modal-close { position:absolute; right:15px; top:15px; border:none; background:none; color:white; font-size:28px; cursor:pointer; }
+    .photo-preview { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+    .photo-preview .photo-item { position:relative; display:inline-block; }
+    .photo-preview img { width:60px; height:60px; object-fit:cover; border-radius:8px; border:2px solid #d4af37; }
+    .photo-preview .photo-remove { position:absolute; top:-8px; right:-8px; width:20px; height:20px; background:#e53935; border-radius:50%; color:#fff; font-size:12px; text-align:center; line-height:20px; cursor:pointer; }
+    .stars-select { display:flex; gap:4px; margin-bottom:12px; }
+    .stars-select span { font-size:28px; cursor:pointer; }
+    .bottom-nav { position:fixed; bottom:0; left:0; right:0; max-width:480px; margin:0 auto; background:rgba(0,0,0,0.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-top:1px solid rgba(212,175,55,0.3); display:flex; justify-content:space-around; align-items:center; padding:8px 0 12px; z-index:999; }
+    .bottom-nav .nav-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:10px; color:#888; cursor:pointer; padding:4px 12px; }
+    .bottom-nav .nav-item.active { color:#d4af37; }
+    .bottom-nav .nav-icon { width:24px; height:24px; object-fit:contain; vertical-align:middle; font-size:0; }
+  </style>
+</head>
+<body>
+  <div class="admin-header"><h1><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/admin.png?v=3" style="width:24px;height:24px;vertical-align:middle;margin-right:6px;"> ПАНЕЛЬ УПРАВЛЕНИЯ</h1></div>
+  <div id="content"></div>
+  <div id="bottomNav" class="bottom-nav">
+    <div class="nav-item" onclick="navigateTo('index.html')"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/home.png" class="nav-icon">Главная</div>
+    <div class="nav-item" onclick="navigateTo('index.html')"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/menu.png" class="nav-icon">Меню</div>
+    <div class="nav-item" onclick="navigateTo('index.html')"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/profile.png" class="nav-icon">Кабинет</div>
+    <div class="nav-item active"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/admin.png" class="nav-icon">Админ</div>
+  </div>
+  <div class="modal-overlay" id="modal"><div class="modal-box"><button class="modal-close" onclick="closeModal()">✕</button><div id="modalContent"></div></div></div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    var tg = window.Telegram && window.Telegram.WebApp;
+    var currentTelegramId = "";
+    var isAdmin = false;
+    var ADMIN_IDS = ["8576141705"];
+    if (tg) { tg.ready(); tg.expand(); if (tg.initDataUnsafe && tg.initDataUnsafe.user) { currentTelegramId = String(tg.initDataUnsafe.user.id); isAdmin = ADMIN_IDS.indexOf(currentTelegramId) !== -1; } }
+    if (!isAdmin) { document.getElementById("content").innerHTML = "<div style=\"text-align:center;padding:40px;color:#e53935;\"><h2>⛔ Доступ запрещён</h2></div>"; }
+
+    var SUPABASE_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/products";
+    var SUPABASE_KEY = "sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC";
+    var ORDERS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/orders";
+    var CLIENTS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients";
+    var REVIEWS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/reviews";
+    var SETTINGS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/settings";
+    var STORAGE_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/products";
+    var STORAGE_UPLOAD_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/products";
+    var RECEIPTS_STORAGE_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/receipts";
+    var RECEIPTS_PUBLIC_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/receipts";
+    var REVIEWS_STORAGE_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/reviews";
+    var VISITS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/visits";
+
+    function getHeaders() { return { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json" }; }
+    function escapeHTML(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+    function formatDate(d) { if (!d) return ""; var dt = new Date(d); if (isNaN(dt.getTime())) return ""; return String(dt.getDate()).padStart(2,"0") + "-" + String(dt.getMonth()+1).padStart(2,"0") + "-" + dt.getFullYear(); }
+    function formatDateTime(d) { if (!d) return "—"; var dt = new Date(d); if (isNaN(dt.getTime())) return "—"; return String(dt.getDate()).padStart(2,"0") + "-" + String(dt.getMonth()+1).padStart(2,"0") + "-" + dt.getFullYear() + " " + String(dt.getHours()).padStart(2,"0") + ":" + String(dt.getMinutes()).padStart(2,"0"); }
+    function closeModal() { document.getElementById("modal").style.display = "none"; document.body.style.overflow = ""; }
+    function openModal(html) { document.getElementById("modalContent").innerHTML = html; document.getElementById("modal").style.display = "block"; document.body.style.overflow = "hidden"; }
+    function navigateTo(url) { window.location.href = url; }
+
+    var CATEGORIES = ["Оптика / Прицелы","Квадрокоптеры / FPV / БПЛА","НСУ / Ретрансляторы","Комплектующие для БПЛА","Электростанции / Генераторы","Броня / Экипировка","Мото / Квадроциклы","Усилители сигнала / Инкубаторы","Рации","Детекторы БПЛА","РЭБ","Гаджеты","Смартчасы","Спутниковый интернет"];
+    var pendingPhotos = [], pendingReviewPhotos = [], reviewStars = 5, maintenanceMode = false;
+
+    async function loadMaintenanceMode() { try { var r = await fetch(SETTINGS_URL + "?select=maintenance_mode&id=eq.1", { headers: getHeaders() }); var d = await r.json(); if (Array.isArray(d) && d.length > 0) maintenanceMode = d[0].maintenance_mode === true; } catch(e) {} }
+    async function toggleMaintenance() { maintenanceMode = !maintenanceMode; try { await fetch(SETTINGS_URL + "?id=eq.1", { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ maintenance_mode: maintenanceMode }) }); alert(maintenanceMode ? "🔴 Техперерыв включён!" : "🟢 Сайт открыт!"); } catch(e) { alert("❌ Ошибка"); } showMainMenu(); }
+
+    var _ANNOUNCE_DEFAULT_TEXT = "🛒 *ВОЕНТОРГ — ваш надёжный поставщик*\n\n" +
+      "✅ Оптика и прицелы\n" +
+      "✅ Квадрокоптеры и FPV / БПЛА\n" +
+      "✅ Броня и экипировка\n" +
+      "✅ Рации, усилители сигнала\n" +
+      "✅ Электростанции и генераторы\n" +
+      "✅ И многое другое...\n\n" +
+      "📦 Быстрая отправка. Проверенное качество.\n" +
+      "👇 Открывайте магазин прямо сейчас!";
+    var _ANNOUNCE_DEFAULT_BTN_TEXT = "📱 Открыть магазин";
+    var _ANNOUNCE_DEFAULT_BTN_URL = "https://t.me/VOENTORG_MINI_APP_BOT?startapp";
+
+    var _announcePhotoUrl = '';
+
+    function sendAnnounce() {
+      _announcePhotoUrl = '';
+      openModal(
+        '<h3 style="color:#f5c96a;margin-bottom:14px;">📢 Анонс в канал</h3>' +
+        '<div class="form-label">Текст поста:</div>' +
+        '<textarea class="form-textarea" id="announceText" style="min-height:160px;font-size:13px;line-height:1.5;">' + _ANNOUNCE_DEFAULT_TEXT + '</textarea>' +
+        '<div class="form-label">Текст кнопки:</div>' +
+        '<input class="form-input" id="announceBtnText" value="' + escapeHTML(_ANNOUNCE_DEFAULT_BTN_TEXT) + '">' +
+        '<div class="form-label">Ссылка кнопки:</div>' +
+        '<input class="form-input" id="announceBtnUrl" type="url" value="' + escapeHTML(_ANNOUNCE_DEFAULT_BTN_URL) + '">' +
+        '<div class="form-label">Фото (необязательно):</div>' +
+        '<div id="announcePhotoPreview" style="margin-bottom:8px;"></div>' +
+        '<label style="display:block;width:100%;padding:10px;background:#000;color:#d4af37;border:1px solid #d4af37;border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px;text-align:center;box-sizing:border-box;margin-bottom:12px;">' +
+          '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"> Загрузить фото' +
+          '<input type="file" accept="image/*" style="display:none;" onchange="_announceUploadPhoto(this)">' +
+        '</label>' +
+        '<div style="display:flex;gap:8px;margin-top:4px;">' +
+          '<button class="action-btn" style="flex:1;padding:14px;font-size:15px;" onclick="closeModal()">Отмена</button>' +
+          '<button class="action-btn green" style="flex:2;padding:14px;font-size:15px;" onclick="_doSendAnnounce(this)">✉️ Отправить</button>' +
+        '</div>'
+      );
+    }
+
+    async function _announceUploadPhoto(input) {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      var preview = document.getElementById('announcePhotoPreview');
+      if (preview) preview.innerHTML = '<div style="color:#d4af37;font-size:12px;">⏳ Загрузка...</div>';
+      try {
+        var compressed = await _compressImage(file, 800);
+        var fn = 'announce_' + Date.now() + '.jpg';
+        var fd = new FormData();
+        fd.append('file', compressed, fn);
+        var r = await fetch(STORAGE_UPLOAD_URL + '/' + fn, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'x-upsert': 'true' },
+          body: fd
+        });
+        if (!r.ok) throw new Error('Ошибка загрузки: ' + r.status);
+        _announcePhotoUrl = STORAGE_URL + '/' + fn;
+        if (preview) preview.innerHTML =
+          '<div style="position:relative;display:inline-block;">' +
+            '<img src="' + _announcePhotoUrl + '" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #d4af37;">' +
+            '<span onclick="_announceClearPhoto()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#e53935;border-radius:50%;color:#fff;font-size:12px;text-align:center;line-height:20px;cursor:pointer;">✕</span>' +
+          '</div>';
+      } catch(e) {
+        _announcePhotoUrl = '';
+        if (preview) preview.innerHTML = '<div style="color:#e53935;font-size:12px;">❌ ' + e.message + '</div>';
+      }
+    }
+
+    function _announceClearPhoto() {
+      _announcePhotoUrl = '';
+      var preview = document.getElementById('announcePhotoPreview');
+      if (preview) preview.innerHTML = '';
+    }
+
+    async function _doSendAnnounce(btn) {
+      var announceText = document.getElementById('announceText').value.trim();
+      var btnText = document.getElementById('announceBtnText').value.trim();
+      var btnUrl = document.getElementById('announceBtnUrl').value.trim();
+      if (!announceText) { alert('❗ Введите текст поста'); return; }
+      if (!btnText)      { alert('❗ Введите текст кнопки'); return; }
+      if (!btnUrl)       { alert('❗ Введите ссылку кнопки'); return; }
+      var photoUrl = _announcePhotoUrl;
+      closeModal();
+      if (!confirm('Отправить анонс-пост в канал?')) return;
+      if (btn) { btn.style.opacity = '0.5'; btn.style.pointerEvents = 'none'; }
+      try {
+        var payload = {
+          announce_text: announceText,
+          button_text: btnText,
+          button_url: btnUrl
+        };
+        if (photoUrl) payload.photo_url = photoUrl;
+        var r = await fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/smart-task', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC' },
+          body: JSON.stringify(payload)
+        });
+        var d = await r.json();
+        if (d.success) {
+          alert('✅ Анонс отправлен и закреплён в канале!');
+        } else {
+          alert('❌ Ошибка: ' + (d.error || 'неизвестная ошибка'));
+        }
+      } catch(e) {
+        alert('❌ Ошибка: ' + e.message);
+      }
+      if (btn) { btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; }
+    }
+
+    function showMainMenu() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "block";
+      var prevMode = maintenanceMode;
+      // Показываем меню мгновенно с текущим состоянием
+      var ml = maintenanceMode ? "🔴 Выключить" : "🟢 Включить";
+      var mb = maintenanceMode ? "#e53935" : "#4caf50";
+      var html =
+        "<div class=\"admin-grid\">" +
+        "<div class=\"admin-card\" onclick=\"showOrders()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/orders.png?v=1\" class=\"admin-icon\"><div class=\"label\">Заказы</div></div>" +
+        "<div class=\"admin-card\" onclick=\"showProducts()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/cart.png?v=1\" class=\"admin-icon\"><div class=\"label\">Товары</div></div>" +
+        "<div class=\"admin-card\" onclick=\"showAnnouncements()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1\" class=\"admin-icon\"><div class=\"label\">Объявления</div></div>" +
+        "<div class=\"admin-card\" onclick=\"showClients()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/user.png?v=1\" class=\"admin-icon\"><div class=\"label\">Клиенты</div></div>" +
+        "<div class=\"admin-card\" onclick=\"showAdminReviews()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/reviews_icon.png?v=1\" class=\"admin-icon\"><div class=\"label\">Отзывы</div></div>" +
+        "<div class=\"admin-card\" onclick=\"sendAnnounce()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1\" class=\"admin-icon\"><div class=\"label\">Анонс в канал</div></div>" +
+        "<div class=\"admin-card\" onclick=\"toggleMaintenance()\" style=\"border-color:" + mb + "\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/settings.png?v=1\" class=\"admin-icon\"><div class=\"label\">Техперерыв</div><div class=\"desc\">" + ml + "</div></div>" +
+        "</div>";
+      document.getElementById("content").innerHTML = html;
+      // Фоновое обновление maintenance_mode (без моргания)
+      loadMaintenanceMode().then(function() {
+        if (maintenanceMode !== prevMode) {
+          // Изменилось — обновляем только кнопку техперерыва
+          var cards = document.querySelectorAll('.admin-card');
+          if (cards.length >= 7) {
+            var lastCard = cards[6];
+            var newMl = maintenanceMode ? "🔴 Выключить" : "🟢 Включить";
+            var newMb = maintenanceMode ? "#e53935" : "#4caf50";
+            lastCard.style.borderColor = newMb;
+            var desc = lastCard.querySelector('.desc');
+            if (desc) desc.textContent = newMl;
+          }
+        }
+      });
+    }
+
+    function getStatusEmoji(s) {
+      var base = 'https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/';
+      var icons = {
+        'Ожидает реквизитов': 'ico_pending.png',
+        'Ожидает оплаты': 'ico_waiting.png',
+        'Проверка оплаты': 'ico_waiting.png',
+        'Оплачен': 'ico_paid.png',
+        'Отправлен': 'ico_shipped.png',
+        'Доставлен': 'ico_delivered.png',
+        'Получен': 'ico_delivered.png',
+        'Отменён': 'ico_cancelled.png'
+      };
+      var icon = icons[s];
+      return icon ? '<img src="' + base + icon + '?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;">' : '📌';
+    }
+    function getStatusColor(s) { var c = { "Ожидает реквизитов": "#d4af37", "Ожидает оплаты": "#d4af37", "Оплачен": "#4caf50", "Отправлен": "#4caf50", "Отменён": "#e53935" }; return c[s] || "#d4af37"; }
+    function getStatusBadge(p) { if (!p || !p.status) return { text: "", color: "" }; if (p.status === "available") return { text: "🟢 В наличии", color: "#4caf50" }; if (p.status === "sold") return { text: "🔴 Продано", color: "#e53935" }; return { text: "", color: "" }; }
+    function sendNotify(data) {
+      fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC' },
+        body: JSON.stringify(data)
+      }).catch(function(){});
+    }
+
+    async function changeOrderStatus(id, s) {
+      if (!confirm("Сменить статус на «" + s + "»?")) return;
+      try {
+        await fetch(ORDERS_URL + "?id=eq." + id, { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ status: s }) });
+        var clientTgId = '';
+        fetch(ORDERS_URL + '?select=telegram_id&id=eq.' + id, { headers: getHeaders() })
+          .then(function(r){ return r.json(); })
+          .then(function(rows) {
+            if (Array.isArray(rows) && rows.length > 0) {
+              clientTgId = rows[0].telegram_id || '';
+              sendNotify({ action: 'status_change', order_id: id, status: s, track_number: '', client_telegram_id: clientTgId });
+            } else {
+              sendNotify({ action: 'status_change', order_id: id, status: s, track_number: '', client_telegram_id: '' });
+            }
+          }).catch(function() {
+            sendNotify({ action: 'status_change', order_id: id, status: s, track_number: '', client_telegram_id: '' });
+          });
+        alert("✅ Готово!"); showOrders();
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+
+    async function showOrders() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = document.getElementById("content");
+      c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#d4af37;padding:20px;\">Загрузка...</div>";
+      try {
+        var r = await fetch(ORDERS_URL + "?select=*&order=id.desc&limit=100", { headers: getHeaders() });
+        var orders = await r.json();
+        if (!Array.isArray(orders)) orders = [];
+        var h = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><h2 style=\"text-align:center;color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/orders.png?v=1\" class=\"section-icon\"> Заказы (" + orders.length + ")</h2>";
+        if (orders.length === 0) {
+          h += "<div style=\"text-align:center;padding:20px;opacity:0.7;\">Заказов пока нет</div>";
+        } else {
+          orders.forEach(function(o) {
+            var sc = getStatusColor(o.status), se = getStatusEmoji(o.status);
+            var btns = "";
+            if (o.status === "Ожидает реквизитов") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#d4af37;border:2px solid #d4af37;\" onclick=\"showRequisitesForm(" + o.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_card.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Реквизиты</button>";
+            if (o.status === "Ожидает оплаты") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#d4af37;border:2px solid #d4af37;\" onclick=\"showRequisitesForm(" + o.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Изменить реквизиты</button>";
+            if (o.status === "Проверка оплаты") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#4caf50;border:2px solid #4caf50;\" onclick=\"changeOrderStatus(" + o.id + ",'Оплачен')\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Оплачен</button>";
+            if (o.status === "Проверка оплаты" && o.receipt_url) btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#2196F3;border:2px solid #2196F3;\" onclick=\"window.open('" + o.receipt_url + "','_blank')\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_paid.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Чек</button>";
+            if (o.status === "Оплачен") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#2196F3;border:2px solid #2196F3;\" onclick=\"showTrackingForm(" + o.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Трек</button>";
+            if (o.status === "Отправлен") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#4caf50;border:2px solid #4caf50;\" onclick=\"changeOrderStatus(" + o.id + ",'Доставлен')\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delivered.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Доставлен</button>";
+            if (o.status === "Ожидает реквизитов" || o.status === "Ожидает оплаты") btns += "<button style=\"width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#e53935;border:2px solid #e53935;\" onclick=\"changeOrderStatus(" + o.id + ",'Отменён')\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Отменить</button>";
+            btns += "<button style=\"width:auto;padding:8px 16px;font-size:12px;border-radius:8px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#e53935;border:2px solid #e53935;\" onclick=\"deleteOrder(" + o.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Удалить</button>";
+            h += "<div class=\"list-item\">";
+            h += "<div style=\"text-align:center;margin-bottom:10px;\"><span style=\"display:inline-block;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:bold;border:2px solid " + sc + ";color:" + sc + ";background:#000;\">" + se + " " + o.status + "</span></div>";
+            h += "<div><b>🆔 " + o.id + "</b> — " + escapeHTML((o.product_title || "—").substring(0, 40)) + "</div>";
+            h += "<div style=\"color:#f5c96a;font-weight:bold;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> " + (o.price || "—") + "</div>";
+            h += "<div><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/user.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> " + escapeHTML(o.client_name || "—") + " | <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_phone.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> " + escapeHTML(o.client_phone || "—") + "</div>";
+            var deliveryLine = "";
+            if (o.delivery_type) deliveryLine += "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delivery.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Способ: " + escapeHTML(o.delivery_type);
+            if (o.client_address) {
+              if (deliveryLine) deliveryLine += " | ";
+              if (o.client_address === "Самовывоз") {
+                deliveryLine += "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Самовывоз";
+              } else {
+                deliveryLine += "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Адрес: " + escapeHTML(o.client_address);
+              }
+            }
+            if (deliveryLine) h += "<div style=\"margin-top:2px;font-size:13px;color:#ccc;\">" + deliveryLine + "</div>";
+            if (o.status === "Ожидает оплаты" && o.requisites_sent_at) {
+              var _timerDur = (o.payment_method && /qr/i.test(o.payment_method)) ? 15 : 20;
+              h += "<div id=\"order_timer_" + o.id + "\" data-sent=\"" + o.requisites_sent_at + "\" data-dur=\"" + _timerDur + "\" style=\"margin-top:6px;font-size:14px;font-weight:bold;color:#ff9800;\">⏳ ...</div>";
+            }
+            h += "<div style=\"margin-top:8px;\">" + btns + "</div></div>";
+          });
+        }
+        c.innerHTML = h;
+        _startOrderTimers();
+      } catch(e) {
+        c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#e53935;\">Ошибка: " + e.message + "</div>";
+      }
+    }
+
+    var _orderTimerInterval = null;
+    var _adminExpiredOrders = {};
+    function _startOrderTimers() {
+      if (_orderTimerInterval) { clearInterval(_orderTimerInterval); _orderTimerInterval = null; }
+      var timerEls = document.querySelectorAll('[id^="order_timer_"]');
+      if (!timerEls.length) return;
+      function _tick() {
+        timerEls.forEach(function(el) {
+          var sent = new Date(el.dataset.sent);
+          var dur = parseInt(el.dataset.dur, 10) * 60 * 1000;
+          var remaining = dur - (Date.now() - sent.getTime());
+          if (remaining <= 0) {
+            el.style.color = '#e53935';
+            el.textContent = '⏰ Истекло';
+            // При первом истечении — сменить статус и кнопки
+            var oid = el.id.replace('order_timer_', '');
+            if (!_adminExpiredOrders[oid]) {
+              _adminExpiredOrders[oid] = true;
+              // Меняем статус на Отменён
+              fetch(ORDERS_URL + '?id=eq.' + oid, {
+                method: 'PATCH',
+                headers: getHeaders(),
+                body: JSON.stringify({ status: 'Отменён', archived: false })
+              }).catch(function(){});
+              // Меняем кнопки: убираем «Изменить реквизиты» и «Отменить», оставляем только «Удалить»
+              var card = el.closest('.list-item');
+              if (card) {
+                var btnWrap = card.querySelector('div[style*="margin-top:8px"]');
+                if (btnWrap) {
+                  btnWrap.innerHTML = '<button style="width:auto;padding:8px 16px;font-size:12px;border-radius:8px;margin-top:6px;font-weight:bold;cursor:pointer;background:#000;color:#e53935;border:2px solid #e53935;" onclick="deleteOrder(' + oid + ')"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Удалить</button>';
+                }
+              }
+            }
+          } else {
+            var totalSec = Math.floor(remaining / 1000);
+            var mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+            var ss = String(totalSec % 60).padStart(2, '0');
+            el.style.color = '#ff9800';
+            el.textContent = '⏳ ' + mm + ':' + ss;
+          }
+        });
+      }
+      _tick();
+      _orderTimerInterval = setInterval(_tick, 1000);
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm("Удалить заказ №" + id + "?")) return;
+      try {
+        var cr = await fetch(ORDERS_URL + "?select=receipt_url&id=eq." + id, { headers: getHeaders() });
+        var cd = await cr.json();
+        if (Array.isArray(cd) && cd.length > 0 && cd[0].receipt_url) {
+          try { var rp = cd[0].receipt_url.replace(RECEIPTS_PUBLIC_URL + "/", ""); if (rp) await fetch(RECEIPTS_STORAGE_URL + "/" + rp, { method: "DELETE", headers: getHeaders() }); } catch(e2) {}
+        }
+        await fetch(ORDERS_URL + "?id=eq." + id, { method: "DELETE", headers: getHeaders() });
+        alert("✅ Удалён!"); showOrders();
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+
+    async function showTrackingForm(id) {
+      openModal("<div style=\"text-align:center;padding:20px;color:#d4af37;\">⏳ Загрузка...</div>");
+      try {
+        var r = await fetch(ORDERS_URL + "?select=id,delivery_type,tk_name&id=eq." + id, { headers: getHeaders() });
+        var d = await r.json();
+        var o = (Array.isArray(d) && d.length > 0) ? d[0] : {};
+        // п.4: Доставка машиной поставщика — трек не нужен, сразу «Отправлен»
+        if (o.delivery_type === "🚛 Доставка машиной поставщика") {
+          if (!confirm("Подтвердить отправку машиной поставщика?")) { closeModal(); return; }
+          await fetch(ORDERS_URL + "?id=eq." + id, {
+            method: "PATCH", headers: getHeaders(),
+            body: JSON.stringify({ status: "Отправлен" })
+          });
+          closeModal(); alert("✅ Статус обновлён!"); showOrders(); return;
+        }
+        // п.3: подставляем selected ТК
+        var currentTK = o.tk_name || o.delivery_type || "";
+        var tkList = ["СДЭК", "Почта России", "Boxberry", "DPD", "Деловые линии", "ПЭК", "СберЛогистика", "Яндекс Доставка", "Ozon", "Wildberries", "Другая"];
+        var opts = tkList.map(function(x) {
+          return "<option" + (x === currentTK ? " selected" : "") + ">" + x + "</option>";
+        }).join("");
+        openModal(
+          "<h3 style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1\" style=\"width:20px;height:20px;vertical-align:middle;margin-right:4px;\"> Трек №" + id + "</h3>" +
+          "<div class=\"form-label\">ТК:</div><select class=\"form-select\" id=\"trackTK\">" + opts + "</select>" +
+          "<div class=\"form-label\">Трек-номер:</div><input class=\"form-input\" id=\"trackNum\" placeholder=\"Введите трек\">" +
+          "<button class=\"action-btn blue\" style=\"width:100%;padding:14px;margin-top:8px;\" onclick=\"submitTracking(" + id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> ОТПРАВИТЬ</button>"
+        );
+      } catch(e) {
+        openModal("<div style=\"text-align:center;padding:20px;color:#e53935;\">Ошибка: " + e.message + "</div>");
+      }
+    }
+    async function submitTracking(id) {
+      var tk = document.getElementById("trackTK") && document.getElementById("trackTK").value;
+      var tn = document.getElementById("trackNum") && document.getElementById("trackNum").value;
+      if (!tk || !tn) { alert("Заполните"); return; }
+      try {
+        await fetch(ORDERS_URL + "?id=eq." + id, { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ tk_name: tk, track_number: tn, status: "Отправлен" }) });
+        var clientTgId2 = '';
+        fetch(ORDERS_URL + '?select=telegram_id&id=eq.' + id, { headers: getHeaders() })
+          .then(function(r){ return r.json(); })
+          .then(function(rows) {
+            if (Array.isArray(rows) && rows.length > 0) {
+              clientTgId2 = rows[0].telegram_id || '';
+              sendNotify({ action: 'status_change', order_id: id, status: 'Отправлен', track_number: tn, client_telegram_id: clientTgId2 });
+            } else {
+              sendNotify({ action: 'status_change', order_id: id, status: 'Отправлен', track_number: tn, client_telegram_id: '' });
+            }
+          }).catch(function() {
+            sendNotify({ action: 'status_change', order_id: id, status: 'Отправлен', track_number: tn, client_telegram_id: '' });
+          });
+        closeModal(); alert("✅ Отправлено!"); showOrders();
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+
+    // ── Заглавные буквы ФИО ──
+    function _titleCase(inp) {
+      var pos = inp.selectionStart;
+      inp.value = inp.value.replace(/(?:^|\s)\S/g, function(ch) { return ch.toUpperCase(); });
+      inp.setSelectionRange(pos, pos);
+    }
+
+    // ── Маска телефона для СБП ──
+    function _adminPhoneMask(inp) {
+      // 1. Пустое поле — не трогаем
+      if (inp.value.trim() === "") return;
+      // 2. Сохраняем позицию курсора: считаем цифры до него
+      var pos = inp.selectionStart;
+      var digitsBeforeCursor = inp.value.slice(0, pos).replace(/\D/g, "").length;
+      // Форматирование
+      var v = inp.value.replace(/\D/g, "");
+      if (v.charAt(0) === "8") v = "7" + v.slice(1);
+      if (v.charAt(0) !== "7") v = "7" + v;
+      v = v.slice(0, 11);
+      var r = "+7";
+      if (v.length > 1) r += " (" + v.slice(1, 4);
+      if (v.length >= 4) r += ") " + v.slice(4, 7);
+      if (v.length >= 7) r += "-" + v.slice(7, 9);
+      if (v.length >= 9) r += "-" + v.slice(9, 11);
+      inp.value = r;
+      // 3. Восстанавливаем курсор: проходим по результату, считаем цифры до digitsBeforeCursor
+      var newPos = 0, cnt = 0;
+      while (newPos < r.length && cnt < digitsBeforeCursor) {
+        if (/\d/.test(r[newPos])) cnt++;
+        newPos++;
+      }
+      if (newPos > r.length) newPos = r.length;
+      inp.setSelectionRange(newPos, newPos);
+    }
+
+    // ── Маска номера карты (16 цифр, группы по 4) ──
+    function _cardMask(inp) {
+      var v = inp.value.replace(/\D/g, "").slice(0, 16);
+      inp.value = v.replace(/(\d{4})(?=\d)/g, "$1 ");
+    }
+
+    var BANKS_LIST = ["Сбербанк", "Т-Банк", "ВТБ", "Альфа-Банк", "Газпромбанк", "Промсвязьбанк", "Другой банк"];
+
+    // Определяет тип оплаты из payment_method ("СБП / ВТБ" → "СБП")
+    function _parsePayType(pm) {
+      if (!pm) return "Карта";
+      var left = (pm.split("/")[0] || "").trim().toLowerCase();
+      if (left.indexOf("сбп") !== -1) return "СБП";
+      if (left.indexOf("qr") !== -1) return "QR";
+      return "Карта";
+    }
+
+    // Извлекает банк клиента из payment_method ("СБП / ВТБ" → "ВТБ")
+    function _parseClientBank(pm) {
+      if (!pm) return "";
+      var parts = pm.split("/");
+      return parts.length > 1 ? parts[1].trim() : "";
+    }
+
+    async function showRequisitesForm(id) {
+      openModal("<div style=\"text-align:center;padding:20px;color:#d4af37;\">⧗ Загрузка...</div>");
+      try {
+        var r = await fetch(ORDERS_URL + "?select=id,payment_method,client_name,price,product_title&id=eq." + id, { headers: getHeaders() });
+        var d = await r.json();
+        var o = (Array.isArray(d) && d.length > 0) ? d[0] : {};
+        var payType = _parsePayType(o.payment_method);
+        var clientBank = _parseClientBank(o.payment_method);
+        var payIcon = payType === "СБП" ? "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_sbp.png?v=1\" style=\"width:20px;height:20px;vertical-align:middle;margin-right:4px;\">" : payType === "QR" ? "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_qr.png?v=1\" style=\"width:20px;height:20px;vertical-align:middle;margin-right:4px;\">" : "<img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_card.png?v=1\" style=\"width:20px;height:20px;vertical-align:middle;margin-right:4px;\">";
+
+        var bankOptions = BANKS_LIST.map(function(b) {
+          return "<option" + (b === clientBank ? " selected" : "") + ">" + b + "</option>";
+        }).join("");
+
+        var infoLine = "";
+        if (o.product_title) {
+          infoLine = "<div style=\"background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:13px;color:#ccc;\">" +
+            "<b style=\"color:#f5c96a;\">Заказ №" + id + "</b> — " + escapeHTML((o.product_title || "").substring(0, 40)) +
+            (o.price ? " &middot; <span style=\"color:#f5c96a;\">" + escapeHTML(o.price) + "</span>" : "") +
+            (o.client_name ? "<br><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/user.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> " + escapeHTML(o.client_name) : "") +
+            (o.payment_method ? " &middot; " + payIcon + " " + escapeHTML(o.payment_method) : "") +
+            "</div>";
+        }
+
+        var fieldLabel, fieldPlaceholder, fieldExtra;
+        if (payType === "СБП") {
+          fieldLabel = "Номер телефона для СБП";
+          fieldPlaceholder = "+7 (999) 999-99-99";
+          fieldExtra = " type=\"tel\" oninput=\"_adminPhoneMask(this)\"";
+        } else if (payType === "QR") {
+          fieldLabel = "Ссылка / инструкция QR";
+          fieldPlaceholder = "https://... или текст";
+          fieldExtra = "";
+        } else {
+          fieldLabel = "Номер карты";
+          fieldPlaceholder = "0000 0000 0000 0000";
+          fieldExtra = " inputmode=\"numeric\" oninput=\"_cardMask(this)\"";
+        }
+
+        var fieldIcon;
+        if (payType === "СБП") fieldIcon = "ico_phone.png";
+        else if (payType === "QR") fieldIcon = "ico_qr.png";
+        else fieldIcon = "ico_card.png";
+
+        var html =
+          "<h3 style=\"color:#f5c96a;margin-bottom:12px;\">" + payIcon + " Реквизиты №" + id + "</h3>" +
+          infoLine +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_person.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Получатель (ФИО):</div>" +
+          "<input class=\"form-input\" id=\"reqRecipient\" placeholder=\"Иванов Иван Иванович\" oninput=\"_titleCase(this)\">" +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_bank.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Банк получателя:</div>" +
+          "<select class=\"form-select\" id=\"reqBank\">" + bankOptions + "</select>" +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/" + fieldIcon + "?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> " + fieldLabel + ":</div>" +
+          "<input class=\"form-input\" id=\"reqText\" placeholder=\"" + fieldPlaceholder + "\"" + fieldExtra + ">" +
+          "<button class=\"action-btn\" style=\"width:100%;padding:14px;margin-top:8px;\" id=\"reqSubmitBtn\">ОТПРАВИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>";
+
+        openModal(html);
+
+        // Навешиваем onclick через JS после отрисовки — нет проблем с кавычками
+        setTimeout(function() {
+          var btn = document.getElementById("reqSubmitBtn");
+          if (btn) btn.onclick = function() { submitRequisites(id, payType); };
+        }, 0);
+
+      } catch(e) {
+        openModal("<div style=\"text-align:center;padding:20px;color:#e53935;\">Ошибка загрузки: " + e.message + "</div>");
+      }
+    }
+
+    async function submitRequisites(id, payType) {
+      var recipient = (document.getElementById("reqRecipient") ? document.getElementById("reqRecipient").value : "").trim();
+      var bank = document.getElementById("reqBank") ? document.getElementById("reqBank").value : "";
+      var reqText = (document.getElementById("reqText") ? document.getElementById("reqText").value : "").trim();
+      if (!bank || !reqText) { alert("Заполните все поля"); return; }
+      var reqLabel = payType === "СБП" ? "Телефон СБП" : payType === "QR" ? "QR / Инструкция" : "Номер карты";
+      var requisitesHTML =
+        (recipient ? "<b>Получатель:</b> " + recipient + "<br>" : "") +
+        "<b>Банк:</b> " + bank + "<br>" +
+        "<b>" + reqLabel + ":</b> " + reqText;
+      try {
+        await fetch(ORDERS_URL + "?id=eq." + id, {
+          method: "PATCH",
+          headers: getHeaders(),
+          body: JSON.stringify({ requisites: requisitesHTML, recipient_bank: bank, status: "Ожидает оплаты", requisites_sent_at: new Date().toISOString() })
+        });
+        closeModal();
+        fetch(ORDERS_URL + '?select=telegram_id&id=eq.' + id, { headers: getHeaders() })
+          .then(function(r){ return r.json(); })
+          .then(function(rows) {
+            var tgId = (Array.isArray(rows) && rows.length > 0) ? (rows[0].telegram_id || '') : '';
+            sendNotify({ action: 'requisites_sent', order_id: id, client_telegram_id: tgId });
+          }).catch(function() {
+            sendNotify({ action: 'requisites_sent', order_id: id, client_telegram_id: '' });
+          });
+        alert("✅ Реквизиты отправлены!"); showOrders();
+      } catch(e) { alert("❌ Ошибка: " + e.message); }
+    }
+
+    async function showProducts() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = document.getElementById("content");
+      c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#d4af37;padding:20px;\">Загрузка...</div>";
+      try {
+        var all = [], from = 0, lim = 200;
+        while (true) {
+          var r = await fetch(SUPABASE_URL + "?select=*&order=id.desc&limit=" + lim + "&offset=" + from, { headers: getHeaders() });
+          var chunk = await r.json();
+          if (!Array.isArray(chunk) || chunk.length === 0) break;
+          all = all.concat(chunk);
+          if (chunk.length < lim) break;
+          from += lim;
+        }
+        var regular = all.filter(function(p) { return p.category !== "Инфо"; });
+        _adminProdAll = regular;
+        _adminProdShown = 0;
+        _adminProdContainer = c;
+        _adminProdRender();
+      } catch(e) { c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#e53935;\">Ошибка: " + e.message + "</div>"; }
+    }
+
+    function showAddProductForm() {
+      pendingPhotos = [];
+      var catOpts = CATEGORIES.map(function(x) { return "<option>" + x + "</option>"; }).join("");
+      openModal(
+        "<h3 style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Новый товар</h3>" +
+        "<div class=\"form-label\">Категория:</div><select class=\"form-select\" id=\"prodCat\">" + catOpts + "</select>" +
+        "<div class=\"form-label\">Название:</div><input class=\"form-input\" id=\"prodTitle\" placeholder=\"Название\">" +
+        "<div class=\"form-label\">Цена:</div><input class=\"form-input\" id=\"prodPrice\" placeholder=\"45.000₽\">" +
+        "<div class=\"form-label\">Описание:</div><textarea class=\"form-textarea\" id=\"prodDesc\" placeholder=\"Описание...\"></textarea>" +
+        "<div class=\"form-label\">Количество в наличии:</div><input class=\"form-input\" id=\"prodStock\" type=\"number\" placeholder=\"1\" min=\"0\" value=\"1\">" +
+        "<div class=\"form-label\">Дата:</div><input class=\"form-input\" id=\"prodDate\" type=\"date\" value=\"" + new Date().toISOString().substring(0, 10) + "\">" +
+        "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"photoPreview\"></div>" +
+        "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadMultiplePhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+        "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveProduct()\">СОХРАНИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+      );
+    }
+    async function showEditProductForm(id) {
+      pendingPhotos = [];
+      try {
+        var r = await fetch(SUPABASE_URL + "?id=eq." + id, { headers: getHeaders() });
+        var d = await r.json();
+        if (!Array.isArray(d) || d.length === 0) { alert("Не найден"); return; }
+        var p = d[0];
+        pendingPhotos = parsePhotos(p.photos);
+        var catOpts = CATEGORIES.map(function(x) { return "<option" + (x === p.category ? " selected" : "") + ">" + x + "</option>"; }).join("");
+        var prevPhotos = pendingPhotos.map(function(ph, idx) { return "<div class=\"photo-item\"><img src=\"" + ph + "\"><div class=\"photo-remove\" onclick=\"removePhoto(" + idx + ")\">✕</div></div>"; }).join("");
+        openModal(
+          "<h3 style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Редактировать #" + id + "</h3>" +
+          "<div class=\"form-label\">Категория:</div><select class=\"form-select\" id=\"prodCat\">" + catOpts + "</select>" +
+          "<div class=\"form-label\">Название:</div><input class=\"form-input\" id=\"prodTitle\" value=\"" + escapeHTML(p.title || "") + "\">" +
+          "<div class=\"form-label\">Цена:</div><input class=\"form-input\" id=\"prodPrice\" value=\"" + (p.price || "") + "\">" +
+          "<div class=\"form-label\">Описание:</div><textarea class=\"form-textarea\" id=\"prodDesc\">" + escapeHTML(p.description || "") + "</textarea>" +
+          "<div class=\"form-label\">Количество в наличии:</div><input class=\"form-input\" id=\"prodStock\" type=\"number\" placeholder=\"1\" min=\"0\" value=\"" + (p.stock || 1) + "\">" +
+          "<div class=\"form-label\">Дата:</div><input class=\"form-input\" id=\"prodDate\" type=\"date\" value=\"" + (p.date ? p.date.substring(0, 10) : new Date().toISOString().substring(0, 10)) + "\">" +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"photoPreview\">" + prevPhotos + "</div>" +
+          "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadMultiplePhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+          "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveProduct(" + id + ")\">СОХРАНИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+        );
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+    async function saveProduct(editId) {
+      var cat = document.getElementById("prodCat") && document.getElementById("prodCat").value;
+      var title = (document.getElementById("prodTitle") ? document.getElementById("prodTitle").value : "").trim();
+      var price = (document.getElementById("prodPrice") ? document.getElementById("prodPrice").value : "").trim();
+      var desc = (document.getElementById("prodDesc") ? document.getElementById("prodDesc").value : "").trim();
+      if (!title) { alert("Введите название"); return; }
+      var stock = parseInt(document.getElementById("prodStock") ? document.getElementById("prodStock").value : "1", 10);
+      if (isNaN(stock) || stock < 0) stock = 1;
+      var prodDate = document.getElementById("prodDate") ? document.getElementById("prodDate").value : new Date().toISOString().substring(0, 10);
+      var data = { category: cat, title: title, price: price, description: desc, photos: pendingPhotos, stock: stock, date: prodDate || new Date().toISOString().substring(0, 10) };
+      try {
+        if (editId) {
+          await fetch(SUPABASE_URL + "?id=eq." + editId, { method: "PATCH", headers: getHeaders(), body: JSON.stringify(data) });
+        } else {
+          var maxR = await fetch(SUPABASE_URL + "?select=id&order=id.desc&limit=1", { headers: getHeaders() });
+          var maxD = await maxR.json();
+          var newId = ((maxD[0] && maxD[0].id) || 0) + 1;
+          data.id = newId;
+          await fetch(SUPABASE_URL, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+        }
+        closeModal(); alert("✅ Сохранено!"); showProducts();
+      } catch(e) { alert("❌ Ошибка: " + e.message); }
+    }
+    async function deleteProduct(id) { if (!confirm("Удалить #" + id + "?")) return; try { await fetch(SUPABASE_URL + "?id=eq." + id, { method: "DELETE", headers: getHeaders() }); alert("✅ Удалён!"); showProducts(); } catch(e) { alert("❌ Ошибка"); } }
+
+    function parsePhotos(raw) { if (!raw) return []; if (Array.isArray(raw)) return raw.filter(function(x) { return x && typeof x === "string" && x.indexOf("http") !== -1; }); if (typeof raw === "string") { try { var j = JSON.parse(raw); if (Array.isArray(j)) return j.filter(function(x) { return x && x.indexOf("http") === 0; }); } catch(e) {} return raw.split(/[,\n]/).map(function(x) { return x.trim(); }).filter(function(x) { return x && x.indexOf("http") === 0; }); } return []; }
+    function removePhoto(idx) { pendingPhotos.splice(idx, 1); refreshPhotoPreview(); }
+    function refreshPhotoPreview() { var prev = document.getElementById("photoPreview"); if (prev) prev.innerHTML = pendingPhotos.map(function(ph, i) { return "<div class=\"photo-item\"><img src=\"" + ph + "\"><div class=\"photo-remove\" onclick=\"removePhoto(" + i + ")\">✕</div></div>"; }).join(""); }
+    async function _compressImage(file, maxW) {
+      maxW = maxW || 800;
+      return new Promise(function(resolve) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var img = new Image();
+          img.onload = function() {
+            var w = img.width, h = img.height;
+            if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+            var canvas = document.createElement("canvas");
+            canvas.width = w; canvas.height = h;
+            canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+            canvas.toBlob(function(blob) { resolve(blob || file); }, "image/jpeg", 0.8);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function uploadMultiplePhotos() { var input = document.createElement("input"); input.type = "file"; input.accept = "image/*"; input.multiple = true; input.onchange = async function(e) { var files = e.target.files; if (!files || files.length === 0) return; for (var i = 0; i < files.length; i++) { try { var compressed = await _compressImage(files[i], 800); var fn = "product_" + Date.now() + "_" + i + ".jpg"; var fd = new FormData(); fd.append("file", compressed, fn); var r = await fetch(STORAGE_UPLOAD_URL + "/" + fn, { method: "POST", headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "x-upsert": "true" }, body: fd }); if (!r.ok) continue; pendingPhotos.push(STORAGE_URL + "/" + fn); refreshPhotoPreview(); } catch(err) {} } }; input.click(); }
+
+    async function showAnnouncements() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = document.getElementById("content");
+      c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#d4af37;padding:20px;\">Загрузка...</div>";
+      try {
+        var all = [], from = 0, lim = 200;
+        while (true) {
+          var r = await fetch(SUPABASE_URL + "?select=*&order=id.desc&limit=" + lim + "&offset=" + from, { headers: getHeaders() });
+          var chunk = await r.json();
+          if (!Array.isArray(chunk) || chunk.length === 0) break;
+          all = all.concat(chunk);
+          if (chunk.length < lim) break;
+          from += lim;
+        }
+        var anns = all.filter(function(p) { return p.category === "Инфо"; });
+        _adminAnnAll = anns;
+        _adminAnnShown = 0;
+        _adminAnnContainer = c;
+        _adminAnnRender();
+      } catch(e) { c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#e53935;\">Ошибка: " + e.message + "</div>"; }
+    }
+    function showAddAnnouncementForm() {
+      pendingPhotos = [];
+      openModal(
+        "<h3 style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Новое объявление</h3>" +
+        "<div class=\"form-label\">Название:</div><input class=\"form-input\" id=\"annTitle\" placeholder=\"Название\">" +
+        "<div class=\"form-label\">Описание:</div><textarea class=\"form-textarea\" id=\"annDesc\" placeholder=\"Текст...\"></textarea>" +
+        "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"photoPreview\"></div>" +
+        "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadMultiplePhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+        "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveAnnouncement()\">ОПУБЛИКОВАТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+      );
+    }
+    async function showEditAnnouncementForm(id) {
+      pendingPhotos = [];
+      try {
+        var r = await fetch(SUPABASE_URL + "?id=eq." + id, { headers: getHeaders() });
+        var d = await r.json();
+        if (!Array.isArray(d) || d.length === 0) { alert("Не найдено"); return; }
+        var p = d[0];
+        pendingPhotos = parsePhotos(p.photos);
+        var prevPhotos = pendingPhotos.map(function(ph, idx) { return "<div class=\"photo-item\"><img src=\"" + ph + "\"><div class=\"photo-remove\" onclick=\"removePhoto(" + idx + ")\">✕</div></div>"; }).join("");
+        openModal(
+          "<h3 style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Редактировать #" + id + "</h3>" +
+          "<div class=\"form-label\">Название:</div><input class=\"form-input\" id=\"annTitle\" value=\"" + escapeHTML(p.title || "") + "\">" +
+          "<div class=\"form-label\">Описание:</div><textarea class=\"form-textarea\" id=\"annDesc\">" + escapeHTML(p.description || "") + "</textarea>" +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"photoPreview\">" + prevPhotos + "</div>" +
+          "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadMultiplePhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+          "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveAnnouncement(" + id + ")\">СОХРАНИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+        );
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+    async function saveAnnouncement(editId) {
+      var title = (document.getElementById("annTitle") ? document.getElementById("annTitle").value : "").trim();
+      var desc = (document.getElementById("annDesc") ? document.getElementById("annDesc").value : "").trim();
+      if (!title) { alert("Введите название"); return; }
+      var data = { category: "Инфо", title: title, price: "", description: desc, photos: pendingPhotos, date: new Date().toISOString().substring(0, 10) };
+      try {
+        if (editId) {
+          await fetch(SUPABASE_URL + "?id=eq." + editId, { method: "PATCH", headers: getHeaders(), body: JSON.stringify(data) });
+        } else {
+          var maxR = await fetch(SUPABASE_URL + "?select=id&order=id.desc&limit=1", { headers: getHeaders() });
+          var maxD = await maxR.json();
+          var newId = ((maxD[0] && maxD[0].id) || 0) + 1;
+          data.id = newId;
+          await fetch(SUPABASE_URL, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+        }
+        closeModal(); alert("✅ Сохранено!"); showAnnouncements();
+      } catch(e) { alert("❌ Ошибка: " + e.message); }
+    }
+
+    async function showAdminReviews() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = document.getElementById("content");
+      c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#d4af37;padding:20px;\">Загрузка...</div>";
+      try {
+        var r = await fetch(REVIEWS_URL + "?select=*&order=date.desc&limit=50", { headers: getHeaders() });
+        var reviews = await r.json();
+        if (!Array.isArray(reviews)) reviews = [];
+        _adminRevAll = reviews;
+        _adminRevShown = 0;
+        _adminRevContainer = c;
+        _adminRevRender();
+      } catch(e) { c.innerHTML = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div><div style=\"text-align:center;color:#e53935;\">Ошибка: " + e.message + "</div>"; }
+    }
+    function showAddReviewForm() {
+      pendingReviewPhotos = []; reviewStars = 5;
+      var starsHTML = [1,2,3,4,5].map(function(i) { return "<span onclick=\"setReviewStars(" + i + ")\" style=\"color:" + (i <= reviewStars ? "#f5c96a" : "#555") + ";\">&#9733;</span>"; }).join("");
+      openModal(
+        "<h3 style=\"color:#f5c96a;margin-bottom:12px;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Новый отзыв</h3>" +
+        "<div class=\"form-label\">Имя:</div><input class=\"form-input\" id=\"reviewName\" placeholder=\"Иван\">" +
+        "<div class=\"form-label\">Оценка:</div><div class=\"stars-select\" id=\"reviewStars\">" + starsHTML + "</div>" +
+        "<div class=\"form-label\">Текст:</div><textarea class=\"form-textarea\" id=\"reviewText\" placeholder=\"Текст отзыва...\"></textarea>" +
+        "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"reviewPhotoPreview\"></div>" +
+        "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadReviewPhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+        "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveReview()\">СОХРАНИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+      );
+    }
+    async function showEditReviewForm(id) {
+      try {
+        var r = await fetch(REVIEWS_URL + "?id=eq." + id, { headers: getHeaders() });
+        var d = await r.json();
+        if (!Array.isArray(d) || d.length === 0) { alert("Отзыв не найден"); return; }
+        var rv = d[0];
+        pendingReviewPhotos = parseReviewPhotos(rv.photos);
+        reviewStars = rv.stars || 5;
+        var starsHTML = [1,2,3,4,5].map(function(i) { return "<span onclick=\"setReviewStars(" + i + ")\" style=\"color:" + (i <= reviewStars ? "#f5c96a" : "#555") + ";\">&#9733;</span>"; }).join("");
+        var prevPhotos = pendingReviewPhotos.map(function(ph, idx) { return "<div class=\"photo-item\"><img src=\"" + ph + "\"><div class=\"photo-remove\" onclick=\"removeReviewPhoto(" + idx + ")\">✕</div></div>"; }).join("");
+        openModal(
+          "<h3 style=\"color:#f5c96a;margin-bottom:12px;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;margin-right:4px;\"> Редактировать отзыв</h3>" +
+          "<div class=\"form-label\">Имя:</div><input class=\"form-input\" id=\"reviewName\" value=\"" + escapeHTML(rv.name || "") + "\">" +
+          "<div class=\"form-label\">Оценка:</div><div class=\"stars-select\" id=\"reviewStars\">" + starsHTML + "</div>" +
+          "<div class=\"form-label\">Текст:</div><textarea class=\"form-textarea\" id=\"reviewText\">" + escapeHTML(rv.text || "") + "</textarea>" +
+          "<div class=\"form-label\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Фото:</div><div class=\"photo-preview\" id=\"reviewPhotoPreview\">" + prevPhotos + "</div>" +
+          "<button class=\"action-btn\" style=\"width:100%;padding:12px;\" onclick=\"uploadReviewPhotos()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Загрузить фото</button>" +
+          "<button class=\"action-btn green\" style=\"width:100%;padding:14px;margin-top:10px;\" onclick=\"saveReview(" + id + ")\">СОХРАНИТЬ <img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-left:3px;\"></button>"
+        );
+      } catch(e) { alert("❌ Ошибка"); }
+    }
+    function setReviewStars(n) { reviewStars = n; document.querySelectorAll("#reviewStars span").forEach(function(s, i) { s.style.color = i < n ? "#f5c96a" : "#555"; }); }
+    function parseReviewPhotos(raw) { if (!raw) return []; if (Array.isArray(raw)) return raw.filter(function(x) { return x && typeof x === "string" && x.indexOf("http") !== -1; }); if (typeof raw === "string") { try { var j = JSON.parse(raw); if (Array.isArray(j)) return j.filter(function(x) { return x && x.indexOf("http") === 0; }); } catch(e) {} return raw.split(/[,\n]/).map(function(x) { return x.trim(); }).filter(function(x) { return x && x.indexOf("http") === 0; }); } return []; }
+    function removeReviewPhoto(idx) { pendingReviewPhotos.splice(idx, 1); refreshReviewPhotoPreview(); }
+    function refreshReviewPhotoPreview() { var prev = document.getElementById("reviewPhotoPreview"); if (prev) prev.innerHTML = pendingReviewPhotos.map(function(ph, i) { return "<div class=\"photo-item\"><img src=\"" + ph + "\"><div class=\"photo-remove\" onclick=\"removeReviewPhoto(" + i + ")\">✕</div></div>"; }).join(""); }
+    function uploadReviewPhotos() { var input = document.createElement("input"); input.type = "file"; input.accept = "image/*"; input.multiple = true; input.onchange = async function(e) { var files = e.target.files; if (!files || files.length === 0) return; for (var i = 0; i < files.length; i++) { try { var compressed = await _compressImage(files[i], 800); var fn = "review_" + Date.now() + "_" + i + ".jpg"; var fd = new FormData(); fd.append("file", compressed, fn); var r = await fetch(STORAGE_UPLOAD_URL.replace("/products", "/reviews") + "/" + fn, { method: "POST", headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "x-upsert": "true" }, body: fd }); if (!r.ok) continue; pendingReviewPhotos.push(REVIEWS_STORAGE_URL + "/" + fn); refreshReviewPhotoPreview(); } catch(err) {} } }; input.click(); }
+    async function saveReview(editId) { var name = (document.getElementById("reviewName") ? document.getElementById("reviewName").value : "").trim() || "Аноним"; var text = (document.getElementById("reviewText") ? document.getElementById("reviewText").value : "").trim(); if (!text) { alert("Введите текст отзыва"); return; } var data = { name: name, stars: reviewStars, photos: pendingReviewPhotos, text: text, date: new Date().toISOString() }; try { if (editId) { await fetch(REVIEWS_URL + "?id=eq." + editId, { method: "PATCH", headers: getHeaders(), body: JSON.stringify(data) }); } else { await fetch(REVIEWS_URL, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) }); } closeModal(); alert("✅ Сохранено!"); showAdminReviews(); } catch(e) { alert("❌ Ошибка: " + e.message); } }
+    async function deleteReview(id) { if (!confirm("Удалить отзыв?")) return; try { await fetch(REVIEWS_URL + "?id=eq." + id, { method: "DELETE", headers: getHeaders() }); alert("✅ Удалён!"); showAdminReviews(); } catch(e) { alert("❌ Ошибка"); } }
+
+    async function showClientDetail(telegramId) {
+      var c = document.getElementById("content");
+      c.innerHTML = '<div style="text-align:center;color:#d4af37;padding:20px;">Загрузка...</div>';
+      try {
+        var clientR = fetch(CLIENTS_URL + "?telegram_id=eq." + telegramId, { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var ordersR = fetch(ORDERS_URL + "?telegram_id=eq." + telegramId + "&order=id.desc&limit=20", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var visitsR = fetch(VISITS_URL + "?telegram_id=eq." + telegramId + "&order=created_at.desc&limit=50", { headers: getHeaders() }).then(function(r){ return r.json(); });
+
+        var clients = await clientR; if (!Array.isArray(clients)) clients = [];
+        var orders = await ordersR; if (!Array.isArray(orders)) orders = [];
+        var visits = await visitsR; if (!Array.isArray(visits)) visits = [];
+
+        if (clients.length === 0) {
+          c.innerHTML = '<div class="page-back-btn" onclick="showClients()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div><div style="text-align:center;padding:20px;color:#e53935;">Клиент не найден</div>';
+          return;
+        }
+
+        var cl = clients[0];
+        var blocked = cl.blocked_until && new Date(cl.blocked_until) > new Date();
+        var visitCount = visits.filter(function(v){ return v.event === 'visit'; }).length;
+        var productViews = visits.filter(function(v){ return v.event === 'product_view'; }).length;
+        var lastVisit = visits.length > 0 ? visits[0].created_at : '—';
+
+        var h = '<div class="page-back-btn" onclick="showClients()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+          '<h2 style="text-align:center;color:#f5c96a;margin:10px 0;">👤 ' + escapeHTML(cl.first_name || cl.username || 'Клиент') + '</h2>' +
+          '<div style="margin:0 10px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:14px;padding:14px;">' +
+            '<div style="font-size:12px;color:#888;margin-bottom:4px;">🆔 ' + telegramId + '</div>' +
+            (cl.username
+              ? '<a href="https://t.me/' + cl.username + '" target="_blank" style="display:block;width:100%;padding:10px;background:#000;color:#2196F3;border:2px solid #2196F3;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;text-decoration:none;box-sizing:border-box;margin:10px 0;">📱 Написать в Telegram</a>'
+              : '<button id="copyIdBtn_' + telegramId + '" onclick="(function(btn,tid){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tid).then(function(){btn.textContent=\'Скопировано!\';setTimeout(function(){btn.textContent=\'📋 Скопировать ID\';},2000);});}else{var ta=document.createElement(\'textarea\');ta.value=tid;document.body.appendChild(ta);ta.select();document.execCommand(\'copy\');document.body.removeChild(ta);btn.textContent=\'Скопировано!\';setTimeout(function(){btn.textContent=\'📋 Скопировать ID\';},2000);}})(this,\'' + telegramId + '\')" style="display:block;width:100%;padding:10px;background:#000;color:#2196F3;border:2px solid #2196F3;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;box-sizing:border-box;margin:10px 0;">📋 Скопировать ID</button>'
+            ) +
+            '<div style="display:flex;justify-content:space-around;text-align:center;gap:4px;margin:12px 0;">' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:18px;font-weight:bold;color:#f5c96a;">' + (cl.total_orders || 0) + '</div><div style="font-size:10px;color:#ccc;">📦 заказов</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:18px;font-weight:bold;color:#f5c96a;">' + visitCount + '</div><div style="font-size:10px;color:#ccc;">👁 визитов</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:18px;font-weight:bold;color:#f5c96a;">' + productViews + '</div><div style="font-size:10px;color:#ccc;">📋 просмотров</div></div>' +
+            '</div>' +
+            '<div style="font-size:11px;color:#888;">🕐 Последний визит: ' + formatDateTime(lastVisit) + '</div>';
+        if (blocked) {
+          h += '<div style="color:#e53935;margin-top:8px;">🚫 Заблокирован до: ' + (cl.blocked_until === '2099-12-31T23:59:59Z' ? 'навсегда' : new Date(cl.blocked_until).toLocaleString('ru-RU')) + '</div>' +
+            '<button onclick="unblockClient(' + telegramId + ')" style="margin-top:6px;padding:8px 16px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:8px;font-weight:bold;cursor:pointer;font-size:12px;">🔓 Разблокировать</button>';
+        }
+        h += '</div>';
+
+        h += '<h3 style="text-align:center;color:#f5c96a;margin:14px 0 8px;font-size:14px;">📦 ЗАКАЗЫ (' + orders.length + ')</h3>';
+        if (orders.length === 0) {
+          h += '<div style="text-align:center;padding:10px;opacity:0.5;">Заказов пока нет</div>';
+        } else {
+          orders.forEach(function(o) {
+            h += '<div class="list-item"><div><b>#' + o.id + '</b> — ' + escapeHTML((o.product_title||'—').substring(0,40)) + '</div><div style="color:#f5c96a;">' + (o.price||'—') + ' | ' + escapeHTML(o.status||'—') + '</div></div>';
+          });
+        }
+
+        h += '<h3 style="text-align:center;color:#f5c96a;margin:14px 0 8px;font-size:14px;">📋 ПРОСМОТРЕННЫЕ ТОВАРЫ (' + productViews + ')</h3>';
+        if (productViews === 0) {
+          h += '<div style="text-align:center;padding:10px;opacity:0.5;">Просмотров пока нет</div>';
+        } else {
+          var pvCount = 0;
+          visits.forEach(function(v) {
+            if (v.event === 'product_view' && v.product_id && pvCount < 5) {
+              pvCount++;
+              h += '<div class="list-item">Товар #' + v.product_id + ' — ' + formatDate(v.created_at) + '</div>';
+            }
+          });
+          if (productViews > 5) {
+            h += '<div style="text-align:center;padding:6px;font-size:12px;color:#888;">Показаны последние 5 из ' + productViews + '</div>';
+          }
+        }
+
+        c.innerHTML = h;
+
+      } catch(e) {
+        c.innerHTML = '<div class="page-back-btn" onclick="showClients()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div><div style="text-align:center;padding:20px;color:#e53935;">Ошибка: ' + e.message + '</div>';
+      }
+    }
+
+    // ── Глобальные переменные для постраничной навигации клиентов ──
+    var _allClients = [];
+    var _clientsPage = 0;
+    var _clientsPerPage = 10;
+    var _pendingLastVisitMap = {};
+
+    function _renderClientRow(cl) {
+      var blocked = cl.blocked_until && new Date(cl.blocked_until) > new Date();
+      var row = '<div class="list-item" style="border-color:' + (blocked ? '#e53935' : '#d4af37') + ';cursor:pointer;" onclick="showClientDetail(\'' + cl.telegram_id + '\')">' +
+        '<div><b>👤 ' + escapeHTML(cl.first_name || cl.username || 'Клиент') + '</b></div>' +
+        '<div style="font-size:11px;color:#888;">🆔 ' + cl.telegram_id + '</div>' +
+        '<div style="font-size:12px;color:#ccc;margin-top:4px;">📦 Заказов: ' + (cl.total_orders || 0) + '</div>' +
+        '<div style="font-size:11px;color:#888;margin-top:2px;">🕐 Последний визит: ' + (_pendingLastVisitMap[cl.telegram_id] ? formatDateTime(_pendingLastVisitMap[cl.telegram_id]) : '—') + '</div>';
+      if (blocked) {
+        row += '<div style="color:#e53935;margin-top:4px;">🚫 Заблокирован до: ' + (cl.blocked_until === '2099-12-31T23:59:59Z' ? 'навсегда' : new Date(cl.blocked_until).toLocaleString('ru-RU')) + '</div>' +
+          '<button onclick="event.stopPropagation();unblockClient(' + cl.telegram_id + ')" style="margin-top:6px;padding:6px 12px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:8px;font-weight:bold;cursor:pointer;font-size:12px;">🔓 Разблокировать</button>';
+      }
+      row += '</div>';
+      return row;
+    }
+
+    function _renderClientsPage(page, isFirstLoad) {
+      _clientsPage = page;
+      var totalPages = Math.ceil(_allClients.length / _clientsPerPage);
+      var start = page * _clientsPerPage;
+      var pageClients = _allClients.slice(start, start + _clientsPerPage);
+
+      var wrap = document.getElementById('clientsPageWrap');
+      if (!wrap) return;
+
+      var h = '';
+      pageClients.forEach(function(cl) { h += _renderClientRow(cl); });
+
+      // Навигация
+      h += '<div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0;gap:8px;">' +
+        '<button onclick="_renderClientsPage(' + (page - 1) + ')" ' +
+          (page === 0 ? 'disabled style="opacity:0.3;cursor:not-allowed;' : 'style="cursor:pointer;') +
+          'padding:10px 16px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;font-size:14px;">← Назад</button>' +
+        '<span style="color:#aaa;font-size:13px;">Стр. ' + (page + 1) + ' из ' + totalPages + '</span>' +
+        '<button onclick="_renderClientsPage(' + (page + 1) + ')" ' +
+          (page >= totalPages - 1 ? 'disabled style="opacity:0.3;cursor:not-allowed;' : 'style="cursor:pointer;') +
+          'padding:10px 16px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;font-size:14px;">Вперёд →</button>' +
+      '</div>';
+
+      wrap.innerHTML = h;
+
+      // Скроллим к заголовку только при смене страницы, не при первой загрузке
+      if (!isFirstLoad) {
+        var hdr = document.getElementById('clientsHeader');
+        if (hdr) hdr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    async function showClients() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = document.getElementById("content");
+      c.innerHTML = '<div class="page-back-btn" onclick="showMainMenu()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div><div style="text-align:center;color:#d4af37;padding:20px;">Загрузка...</div>';
+
+      try {
+        var todayStr = new Date().toISOString().substring(0,10);
+        var weekAgo = new Date(Date.now() - 7*86400000).toISOString();
+
+        var clientsR = fetch(CLIENTS_URL + "?select=*&order=id.desc&limit=50", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var visitsTodayR = fetch(VISITS_URL + "?select=telegram_id&created_at=gte." + todayStr + "&event=eq.visit", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var visitsWeekR = fetch(VISITS_URL + "?select=telegram_id&created_at=gte." + weekAgo + "&event=eq.visit", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var viewsTodayR = fetch(VISITS_URL + "?select=id&created_at=gte." + todayStr + "&event=eq.product_view", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var viewsWeekR = fetch(VISITS_URL + "?select=id&created_at=gte." + weekAgo + "&event=eq.product_view", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var ordersTodayR = fetch(ORDERS_URL + "?select=id&created_at=gte." + todayStr, { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var ordersWeekR = fetch(ORDERS_URL + "?select=id&created_at=gte." + weekAgo, { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var lastVisitsR = fetch(VISITS_URL + "?select=telegram_id,created_at&event=eq.visit&order=created_at.desc&limit=50", { headers: getHeaders() }).then(function(r){ return r.json(); });
+        var topProductsR = fetch(SUPABASE_URL + "?select=id,title,views&views=gt.0&category=neq.Инфо&order=views.desc&limit=5", { headers: getHeaders() }).then(function(r){ return r.json(); });
+
+        var clients = await clientsR; if (!Array.isArray(clients)) clients = [];
+        var visitsToday = await visitsTodayR; if (!Array.isArray(visitsToday)) visitsToday = [];
+        var visitsWeek = await visitsWeekR; if (!Array.isArray(visitsWeek)) visitsWeek = [];
+        var viewsToday = await viewsTodayR; if (!Array.isArray(viewsToday)) viewsToday = [];
+        var viewsWeek = await viewsWeekR; if (!Array.isArray(viewsWeek)) viewsWeek = [];
+        var ordersToday = await ordersTodayR; if (!Array.isArray(ordersToday)) ordersToday = [];
+        var ordersWeek = await ordersWeekR; if (!Array.isArray(ordersWeek)) ordersWeek = [];
+        var lastVisits = await lastVisitsR; if (!Array.isArray(lastVisits)) lastVisits = [];
+        var topProducts = await topProductsR; if (!Array.isArray(topProducts)) topProducts = [];
+
+        var uniqueToday = new Set(visitsToday.map(function(v){ return v.telegram_id; })).size;
+        var uniqueWeek  = new Set(visitsWeek.map(function(v){ return v.telegram_id; })).size;
+
+        var lastVisitMap = {};
+        lastVisits.forEach(function(v) {
+          if (!lastVisitMap[v.telegram_id]) lastVisitMap[v.telegram_id] = v.created_at;
+        });
+
+        var h = '<div class="page-back-btn" onclick="showMainMenu()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+          '<h2 style="text-align:center;color:#f5c96a;margin:10px 0;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/user.png?v=1" class="section-icon"> КЛИЕНТЫ И АНАЛИТИКА</h2>' +
+
+          '<div style="margin:0 10px 16px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:14px;padding:12px;">' +
+            '<div style="text-align:center;color:#d4af37;font-weight:bold;margin-bottom:8px;">📊 СЕГОДНЯ</div>' +
+            '<div style="display:flex;justify-content:space-around;text-align:center;gap:4px;">' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + uniqueToday + '</div><div style="font-size:10px;color:#ccc;">👥 посетителей</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + viewsToday.length + '</div><div style="font-size:10px;color:#ccc;">👁 просмотров</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + ordersToday.length + '</div><div style="font-size:10px;color:#ccc;">📦 заказов</div></div>' +
+            '</div>' +
+            '<div style="text-align:center;color:#d4af37;font-weight:bold;margin:10px 0 8px;">📅 ЗА НЕДЕЛЮ</div>' +
+            '<div style="display:flex;justify-content:space-around;text-align:center;gap:4px;">' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + uniqueWeek + '</div><div style="font-size:10px;color:#ccc;">👥 посетителей</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + viewsWeek.length + '</div><div style="font-size:10px;color:#ccc;">👁 просмотров</div></div>' +
+              '<div style="flex:1;background:rgba(212,175,55,0.1);border-radius:10px;padding:8px;"><div style="font-size:20px;font-weight:bold;color:#f5c96a;">' + ordersWeek.length + '</div><div style="font-size:10px;color:#ccc;">📦 заказов</div></div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="margin:0 10px 16px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:14px;padding:12px;">' +
+            '<div style="text-align:center;color:#d4af37;font-weight:bold;margin-bottom:8px;">📋 ТОП-5 ТОВАРОВ ПО ПРОСМОТРАМ</div>';
+        topProducts.forEach(function(tp, i) {
+          h += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);">' +
+            '<div style="color:#ccc;font-size:12px;">' + (['🥇','🥈','🥉','4.','5.'][i]) + ' ' + escapeHTML((tp.title||'—').substring(0,40)) + '</div>' +
+            '<div style="color:#f5c96a;font-size:12px;font-weight:bold;">' + (tp.views||0) + ' 👁</div>' +
+          '</div>';
+        });
+        h += '</div>' +
+
+          '<div style="text-align:center;margin:0 10px 14px;">' +
+            '<button onclick="showClients()" style="width:100%;padding:10px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;">' +
+              '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:14px;height:14px;vertical-align:middle;margin-right:3px;"> 🔄 Обновить</button>' +
+          '</div>' +
+
+          '<h3 id="clientsHeader" style="text-align:center;color:#f5c96a;margin:10px 0;font-size:14px;">👤 КЛИЕНТЫ (' + clients.length + ')</h3>';
+
+        if (clients.length === 0) {
+          h += '<div style="text-align:center;padding:20px;opacity:0.7;">Клиентов пока нет</div>';
+          c.innerHTML = h;
+        } else {
+          // Сортируем по дате последнего визита (сначала самые недавние)
+          _pendingLastVisitMap = lastVisitMap;
+          clients.sort(function(a, b) {
+            var aDate = lastVisitMap[a.telegram_id] ? new Date(lastVisitMap[a.telegram_id]).getTime() : 0;
+            var bDate = lastVisitMap[b.telegram_id] ? new Date(lastVisitMap[b.telegram_id]).getTime() : 0;
+            return bDate - aDate;
+          });
+          _allClients = clients;
+          _clientsPage = 0;
+          h += '<div id="clientsPageWrap"></div>';
+          c.innerHTML = h;
+          _renderClientsPage(0, true);
+        }
+
+      } catch(e) {
+        c.innerHTML = '<div class="page-back-btn" onclick="showMainMenu()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div><div style="text-align:center;padding:20px;color:#e53935;">Ошибка: ' + e.message + '</div>';
+      }
+    }
+
+    async function unblockClient(telegramId) {
+      if (!confirm("Разблокировать клиента " + telegramId + "?")) return;
+      try {
+        await fetch(CLIENTS_URL + "?telegram_id=eq." + telegramId, {
+          method: "PATCH",
+          headers: getHeaders(),
+          body: JSON.stringify({ blocked_until: null })
+        });
+        alert("✅ Клиент разблокирован!");
+        showClients();
+      } catch(e) { alert("❌ Ошибка: " + e.message); }
+    }
+
+    // ── Пагинация: глобальное состояние ──
+    var _adminProdAll = [], _adminProdShown = 0, _adminProdContainer = null, _adminProdFiltered = [];
+    var _adminAnnAll  = [], _adminAnnShown  = 0, _adminAnnContainer  = null;
+    var _adminRevAll  = [], _adminRevShown  = 0, _adminRevContainer  = null;
+
+    function _changeStock(productId, delta, btn) {
+      var el = document.getElementById('stockVal_' + productId);
+      if (!el) return;
+      var cur = parseInt(el.textContent, 10) || 0;
+      var newVal = Math.max(0, cur + delta);
+      el.textContent = newVal;
+      if (btn) { btn.disabled = true; setTimeout(function(){ btn.disabled = false; }, 300); }
+      // Сохраняем в Supabase
+      fetch(SUPABASE_URL + '?id=eq.' + productId, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ stock: newVal })
+      }).catch(function(){});
+    }
+
+    function _filterAdminProducts() {
+      var sel = document.getElementById("adminCatFilter");
+      var cat = sel ? sel.value : "all";
+      var stSel = document.getElementById("adminStockFilter");
+      var st = stSel ? stSel.value : "all";
+      _adminProdFiltered = _adminProdAll.slice();
+      if (cat !== "all") _adminProdFiltered = _adminProdFiltered.filter(function(p) { return p.category === cat; });
+      if (st === "available") _adminProdFiltered = _adminProdFiltered.filter(function(p) { return parseInt(p.stock, 10) !== 0; });
+      if (st === "sold")      _adminProdFiltered = _adminProdFiltered.filter(function(p) { return parseInt(p.stock, 10) === 0; });
+      _adminProdShown = 0;
+      _adminProdRender(true);
+    }
+
+    function _adminProdRender(keepFilter) {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = _adminProdContainer; if (!c) return;
+
+      // При первом рендере (keepFilter не задан) сбрасываем фильтр
+      if (!keepFilter) {
+        _adminProdFiltered = _adminProdAll.slice();
+      }
+
+      var list = _adminProdFiltered;
+      var catOpts = "<option value=\"all\">Все категории</option>" +
+        CATEGORIES.map(function(x) { return "<option value=\"" + x + "\">" + x + "</option>"; }).join("");
+
+      var h = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div>" +
+        "<h2 id=\"adminProdTitle\" style=\"text-align:center;color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/cart.png?v=1\" class=\"section-icon\"> Товары (" + list.length + ")</h2>" +
+        "<button class=\"action-btn green\" style=\"width:calc(100% - 20px);margin:10px;padding:14px;font-size:16px;\" onclick=\"showAddProductForm()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Добавить товар</button>" +
+        "<select id=\"adminCatFilter\" class=\"form-select\" onchange=\"_filterAdminProducts()\" style=\"margin:10px 10px 4px;width:calc(100% - 20px);\">" + catOpts + "</select>" +
+        "<select id=\"adminStockFilter\" class=\"form-select\" onchange=\"_filterAdminProducts()\" style=\"margin:4px 10px 10px;width:calc(100% - 20px);\">" +
+          "<option value=\"all\">Все статусы</option>" +
+          "<option value=\"available\">🟢 В наличии</option>" +
+          "<option value=\"sold\">🔴 Продано</option>" +
+        "</select>";
+
+      var end = Math.min(_adminProdShown + 10, list.length);
+      list.slice(_adminProdShown, end).forEach(function(p) {
+        var sb = getStatusBadge(p);
+        h += "<div class=\"list-item\"><div><b>🆔 " + p.id + "</b> — " + escapeHTML((p.title || "—").substring(0, 50)) + "</div>";
+        h += "<div style=\"color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1\" style=\"width:18px;height:18px;vertical-align:middle;\"> " + (p.price || "—") + " | " + escapeHTML(p.category || "—") + "</div>";
+        if (sb.text) h += "<div style=\"color:" + sb.color + ";font-weight:bold;\">" + sb.text + "</div>";
+        h += "<div style=\"margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;\">" +
+          "<div style=\"display:inline-flex;align-items:center;border:1px solid #d4af37;border-radius:6px;overflow:hidden;\">" +
+            "<button onclick=\"_changeStock(" + p.id + ",-1,this)\" style=\"width:28px;height:28px;background:#000;color:#d4af37;border:none;font-size:16px;cursor:pointer;line-height:1;\">−</button>" +
+            "<span id=\"stockVal_" + p.id + "\" style=\"min-width:30px;text-align:center;font-size:12px;font-weight:bold;color:#fff;background:#111;padding:0 4px;line-height:28px;display:inline-block;\">" + (p.stock || 1) + "</span>" +
+            "<button onclick=\"_changeStock(" + p.id + ",1,this)\" style=\"width:28px;height:28px;background:#000;color:#d4af37;border:none;font-size:16px;cursor:pointer;line-height:1;\">+</button>" +
+          "</div>" +
+          "<button class=\"action-btn\" onclick=\"showEditProductForm(" + p.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button>" +
+          "<button class=\"action-btn red\" onclick=\"deleteProduct(" + p.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button>" +
+        "</div></div>";
+      });
+      _adminProdShown = end;
+      if (_adminProdShown < list.length) {
+        h += "<button style=\"width:calc(100% - 20px);margin:10px;padding:12px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;\" onclick=\"_adminProdRender(true)\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Показать ещё (" + (list.length - _adminProdShown) + ")</button>";
+      }
+
+      // Запоминаем текущий выбор фильтров до перерисовки
+      var prevCat = "all", prevSt = "all";
+      var prevSel = document.getElementById("adminCatFilter");
+      var prevStSel = document.getElementById("adminStockFilter");
+      if (prevSel) prevCat = prevSel.value;
+      if (prevStSel) prevSt = prevStSel.value;
+
+      c.innerHTML = h;
+
+      // Восстанавливаем выбор фильтров после перерисовки
+      var newSel = document.getElementById("adminCatFilter");
+      var newStSel = document.getElementById("adminStockFilter");
+      if (newSel && keepFilter) newSel.value = prevCat;
+      if (newStSel && keepFilter) newStSel.value = prevSt;
+
+      var titleEl = document.getElementById("adminProdTitle");
+      if (titleEl) titleEl.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function _adminAnnRender() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = _adminAnnContainer; if (!c) return;
+      var h = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div>" +
+        "<h2 id=\"adminAnnTitle\" style=\"text-align:center;color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1\" class=\"section-icon\"> Объявления (" + _adminAnnAll.length + ")</h2>" +
+        "<button class=\"action-btn green\" style=\"width:calc(100% - 20px);margin:10px;padding:14px;font-size:16px;\" onclick=\"showAddAnnouncementForm()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Добавить объявление</button>";
+      if (_adminAnnAll.length === 0) { h += "<div style=\"text-align:center;padding:20px;opacity:0.7;\">Объявлений пока нет</div>"; c.innerHTML = h; return; }
+      var end = Math.min(_adminAnnShown + 10, _adminAnnAll.length);
+      _adminAnnAll.slice(_adminAnnShown, end).forEach(function(p) {
+        h += "<div class=\"list-item\"><div><b>🆔 " + p.id + "</b> — " + escapeHTML((p.title || "—").substring(0, 60)) + "</div><div style=\"margin-top:6px;\"><button class=\"action-btn\" onclick=\"showEditAnnouncementForm(" + p.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button> <button class=\"action-btn red\" onclick=\"deleteProduct(" + p.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button></div></div>";
+      });
+      _adminAnnShown = end;
+      if (_adminAnnShown < _adminAnnAll.length) {
+        h += "<button style=\"width:calc(100% - 20px);margin:10px;padding:12px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;\" onclick=\"_adminAnnRender()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Показать ещё (" + (_adminAnnAll.length - _adminAnnShown) + ")</button>";
+      }
+      c.innerHTML = h;
+      var titleEl = document.getElementById("adminAnnTitle");
+      if (titleEl) titleEl.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function _adminRevRender() {
+      var _ah = document.querySelector(".admin-header"); if (_ah) _ah.style.display = "none";
+      var c = _adminRevContainer; if (!c) return;
+      var h = "<div class=\"page-back-btn\" onclick=\"showMainMenu()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1\" class=\"page-back-icon\"></div>" +
+        "<h2 id=\"adminRevTitle\" style=\"text-align:center;color:#f5c96a;\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/reviews_icon.png?v=1\" class=\"section-icon\"> Отзывы (" + _adminRevAll.length + ")</h2>" +
+        "<button class=\"action-btn green\" style=\"width:calc(100% - 20px);margin:10px;padding:14px;font-size:16px;\" onclick=\"showAddReviewForm()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Добавить отзыв</button>";
+      if (_adminRevAll.length === 0) { h += "<div style=\"text-align:center;padding:20px;opacity:0.7;\">Отзывов пока нет</div>"; c.innerHTML = h; return; }
+      var end = Math.min(_adminRevShown + 10, _adminRevAll.length);
+      _adminRevAll.slice(_adminRevShown, end).forEach(function(rv) {
+        var stars = ""; for (var i = 1; i <= 5; i++) stars += i <= rv.stars ? "⭐" : "☆";
+        var photos = parseReviewPhotos(rv.photos);
+        h += "<div class=\"list-item\"><div><b>👤 " + escapeHTML(rv.name || "Аноним") + "</b> — " + stars + "</div>";
+        h += "<div style=\"font-size:13px;color:#ccc;\">" + escapeHTML((rv.text || "").substring(0, 80)) + "</div>";
+        if (photos.length > 0) h += "<div style=\"margin-top:4px;\">" + photos.map(function(p) { return "<img src=\"" + p + "\" style=\"width:40px;height:40px;object-fit:cover;border-radius:6px;margin:2px;\">"; }).join("") + "</div>";
+        h += "<div style=\"font-size:11px;color:#888;\">" + formatDate(rv.date) + "</div>";
+        h += "<div style=\"margin-top:6px;\"><button class=\"action-btn\" onclick=\"showEditReviewForm(" + rv.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_edit.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button> <button class=\"action-btn red\" onclick=\"deleteReview(" + rv.id + ")\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1\" style=\"width:14px;height:14px;vertical-align:middle;\"></button></div></div>";
+      });
+      _adminRevShown = end;
+      if (_adminRevShown < _adminRevAll.length) {
+        h += "<button style=\"width:calc(100% - 20px);margin:10px;padding:12px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;\" onclick=\"_adminRevRender()\"><img src=\"https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1\" style=\"width:16px;height:16px;vertical-align:middle;margin-right:3px;\"> Показать ещё (" + (_adminRevAll.length - _adminRevShown) + ")</button>";
+      }
+      c.innerHTML = h;
+      var titleEl = document.getElementById("adminRevTitle");
+      if (titleEl) titleEl.scrollIntoView({ behavior: "smooth" });
+    }
+
+    showMainMenu();
+  </script>
+</body>
+</html>
