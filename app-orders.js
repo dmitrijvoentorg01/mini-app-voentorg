@@ -4,9 +4,9 @@
 var _orderState = {};
 
 function sendNotify(data) {
-  fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/notify', {
+  fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/notify', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sb_publishable_Fzk6Y9w1V3DOZ0Opn4m4lw_pynygFV8' },
     body: JSON.stringify(data)
   }).catch(function(){});
 }
@@ -30,7 +30,7 @@ function showNonWorkingHoursWarning(callback) {
   document.body.style.overflow = 'hidden';
   mc.innerHTML =
     '<div style="text-align:center;padding:20px;">' +
-      '<div style="margin-bottom:12px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_waiting.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div>' +
+      '<div style="margin-bottom:12px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_waiting.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div>' +
       '<div style="font-size:16px;font-weight:bold;color:#f5c96a;margin-bottom:8px;">Нерабочее время</div>' +
       '<div style="font-size:13px;color:#ccc;line-height:1.6;margin-bottom:16px;">Рабочее время: ежедневно с 9:00 до 22:00 по Москве.<br>Вы можете оформить заказ сейчас, но реквизиты для оплаты будут отправлены в рабочее время.</div>' +
       '<button class="btn-gold" style="width:100%;" id="warningContinue">Продолжить оформление</button>' +
@@ -67,13 +67,13 @@ function _continueOrderForm(pid, quantity) {
     _doOpenOrderForm(p, quantity); return;
   }
   // Проверяем blocked_until у клиента
-  var CLIENTS_CHECK = 'https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients';
+  var CLIENTS_CHECK = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients';
   fetch(CLIENTS_CHECK + '?select=blocked_until&telegram_id=eq.' + currentTelegramId, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).then(function(r){ return r.json(); }).then(function(rows) {
     var cl = Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
     if (cl && cl.blocked_until && new Date(cl.blocked_until) > new Date()) {
-      alert('<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Вы заблокированы за создание заказов без оплаты. Для решения вопроса обратитесь к администратору.');
+      alert('<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Вы заблокированы за создание заказов без оплаты. Для решения вопроса обратитесь к администратору.');
       return;
     }
     // Считаем неоплаченные отменённые заказы (archived != true)
@@ -82,7 +82,7 @@ function _continueOrderForm(pid, quantity) {
     }).then(function(r2){ return r2.json(); }).then(function(cancelled) {
       if (!Array.isArray(cancelled)) cancelled = [];
       if (cancelled.length >= 3) {
-        alert('<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Вы заблокированы за создание заказов без оплаты. Для решения вопроса обратитесь к администратору.');
+        alert('<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Вы заблокированы за создание заказов без оплаты. Для решения вопроса обратитесь к администратору.');
         return;
       }
       _doOpenOrderForm(p, quantity);
@@ -105,7 +105,7 @@ function _renderOrderStep(p) {
   document.body.style.overflow = 'hidden';
   var mClose = document.getElementById('closeModal');
   if (mClose) {
-    mClose.innerHTML = '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/close_zoom.png?v=1" class="zoom-close-icon">';
+    mClose.innerHTML = '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/close_zoom.png?v=1" class="zoom-close-icon">';
     mClose.onclick = function() { m.style.display = 'none'; document.body.style.overflow = ''; };
   }
 
@@ -124,7 +124,7 @@ function _renderOrderStep(p) {
     '<div style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:10px;padding:10px;margin-bottom:14px;text-align:center;">' +
       '<div style="font-size:13px;color:#aaa;">Товар:</div>' +
       '<div style="font-weight:bold;color:#fff;font-size:14px;">' + escapeHTML(p.title) + '</div>' +
-      '<div style="color:#f5c96a;font-size:16px;font-weight:800;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + (p.price || '') + '</div>' +
+      '<div style="color:#f5c96a;font-size:16px;font-weight:800;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + (p.price || '') + '</div>' +
 
     '</div>';
 
@@ -148,10 +148,10 @@ function _renderOrderStep(p) {
     }
     bodyHTML =
       qtyBlock +
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delivery.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Способ получения</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_delivery.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Способ получения</h3>' +
       '<div style="display:flex;flex-direction:column;gap:10px;">' +
-        _orderOptionBtn('delivery_method', 'Доставка', '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Доставка ТК') +
-        _orderOptionBtn('delivery_method', 'Самовывоз', '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Самовывоз (связаться с админом)') +
+        _orderOptionBtn('delivery_method', 'Доставка', '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Доставка ТК') +
+        _orderOptionBtn('delivery_method', 'Самовывоз', '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Самовывоз (связаться с админом)') +
       '</div>';
 
   } else if (step === 2) {
@@ -164,56 +164,56 @@ function _renderOrderStep(p) {
     }).join('');
     var step2Title = isMoto ? 'Способ доставки' : 'Транспортная компания';
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> ' + step2Title + '</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> ' + step2Title + '</h3>' +
       '<select id="orderCarrier" class="order-input" style="-webkit-appearance:auto;"><option value="">Выберите ТК</option>' + carrierOpts + '</select>' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextCarrier()">Далее →</button></div>';
 
   } else if (step === 3) {
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_person.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Ваше ФИО</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_person.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Ваше ФИО</h3>' +
       '<input id="orderName" class="order-input" placeholder="Иванов Иван Иванович" oninput="_titleCase(this)" value="' + escapeHTML(_orderState.name) + '">' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextFromInput(\'name\',\'orderName\')">Далее →</button></div>';
 
   } else if (step === 4) {
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Город</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Город</h3>' +
       '<input id="orderCity" class="order-input" placeholder="Город" value="' + escapeHTML(_orderState.city) + '">' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextFromInput(\'city\',\'orderCity\')">Далее →</button></div>';
 
   } else if (step === 5) {
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Улица</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_location.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Улица</h3>' +
       '<input id="orderStreet" class="order-input" placeholder="Улица" value="' + escapeHTML(_orderState.street) + '">' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextFromInput(\'street\',\'orderStreet\')">Далее →</button></div>';
 
   } else if (step === 6) {
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_house.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Дом / корпус</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_house.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Дом / корпус</h3>' +
       '<input id="orderHouse" class="order-input" placeholder="Дом / корпус" value="' + escapeHTML(_orderState.house) + '">' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextFromInput(\'house\',\'orderHouse\')">Далее →</button></div>';
 
   } else if (step === 7) {
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_phone.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Номер телефона</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_phone.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Номер телефона</h3>' +
       '<input id="orderPhone" class="order-input" type="tel" placeholder="+7 (999) 123-45-67" value="' + escapeHTML(_orderState.phone) + '" oninput="_phoneMask(this)">' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;" onclick="_orderNextFromInput(\'phone\',\'orderPhone\')">Далее →</button></div>';
 
   } else if (step === 8) {
     var payments = ['Карта', 'СБП', 'QR-код'];
     var _payLabels = {
-      'Карта': '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_card.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Карта',
-      'СБП':   '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_sbp.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> СБП',
-      'QR-код':'<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_qr.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> QR-код'
+      'Карта': '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_card.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Карта',
+      'СБП':   '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_sbp.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> СБП',
+      'QR-код':'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_qr.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> QR-код'
     };
     var payOpts = payments.map(function(pm) {
       return '<option value="' + pm + '"' + (_orderState.payment === pm ? ' selected' : '') + '>' + pm + '</option>';
     }).join('');
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_payment.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Способ оплаты</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_payment.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Способ оплаты</h3>' +
       '<div style="display:flex;flex-direction:column;gap:10px;">' +
       payments.map(function(pm) {
         var isSelected = _orderState.payment === pm;
-        return '<button class="btn-gold' + (isSelected ? ' btn-gold-active' : '') + '" style="width:100%;text-align:left;" onclick="_orderSelectPayment(\'' + pm + '\')">' + (isSelected ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> ' : '') + _payLabels[pm] + '</button>';
+        return '<button class="btn-gold' + (isSelected ? ' btn-gold-active' : '') + '" style="width:100%;text-align:left;" onclick="_orderSelectPayment(\'' + pm + '\')">' + (isSelected ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> ' : '') + _payLabels[pm] + '</button>';
       }).join('') +
       '</div>' +
       '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button></div>';
@@ -224,9 +224,9 @@ function _renderOrderStep(p) {
       return '<option value="' + bk + '"' + (_orderState.bank === bk ? ' selected' : '') + '>' + bk + '</option>';
     }).join('');
     bodyHTML =
-      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Подтверждение заказа</h3>' +
+      '<h3 style="color:#f5c96a;margin-bottom:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Подтверждение заказа</h3>' +
       '<select id="orderBank" class="order-input" style="-webkit-appearance:auto;"><option value="">Выберите свой банк</option>' + bankOpts + '</select>' +
-      '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;background:#000;color:#d4af37;border:2px solid #d4af37;" onclick="_orderSubmitFinal()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_order.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Оформить заказ</button></div>';
+      '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn-gold" style="width:auto;padding:10px 16px;font-size:14px;" onclick="_orderBack(' + p.id + ')">← Назад</button><button class="btn-gold order-next-btn" style="flex:1;background:#000;color:#d4af37;border:2px solid #d4af37;" onclick="_orderSubmitFinal()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_order.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Оформить заказ</button></div>';
   }
 
 
@@ -246,7 +246,7 @@ function _orderOptionBtn(field, value, label) {
   return '<button class="btn-gold' + (isSelected ? ' btn-gold-active' : '') + '" ' +
     'style="width:100%;text-align:left;" ' +
     'onclick="_orderSelectOption(\'' + field + '\',\'' + value.replace(/'/g,"\\'") + '\')">' +
-    (isSelected ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> ' : '') + label + '</button>';
+    (isSelected ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> ' : '') + label + '</button>';
 }
 
 function _orderSelectOption(field, value) {
@@ -426,10 +426,10 @@ async function _submitOrder(p) {
         if (Array.isArray(ld) && ld.length > 0) newId = ld[0].id;
       } catch(_) {}
     }
-    if (mc) mc.innerHTML = '<div style="text-align:center;padding:30px;"><div style="margin-bottom:16px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div><div style="color:#f5c96a;font-size:18px;font-weight:bold;margin-bottom:8px;">Заказ оформлен!</div><button class="btn-gold" style="width:100%;" onclick="document.getElementById(\'modal\').style.display=\'none\'">Закрыть</button></div>';
+    if (mc) mc.innerHTML = '<div style="text-align:center;padding:30px;"><div style="margin-bottom:16px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div><div style="color:#f5c96a;font-size:18px;font-weight:bold;margin-bottom:8px;">Заказ оформлен!</div><button class="btn-gold" style="width:100%;" onclick="document.getElementById(\'modal\').style.display=\'none\'">Закрыть</button></div>';
     // UPSERT клиента: увеличиваем total_orders или создаём запись
     if (currentTelegramId) {
-      var CLIENTS_URL_C = 'https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients';
+      var CLIENTS_URL_C = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients';
       var tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user || {};
       fetch(CLIENTS_URL_C + '?select=id,total_orders&telegram_id=eq.' + currentTelegramId, { headers: getHeaders() })
         .then(function(r) { return r.json(); })
@@ -471,7 +471,7 @@ async function _submitOrder(p) {
       client_telegram_id: currentTelegramId
     });
   } catch(e) {
-    if (mc) mc.innerHTML = '<div style="text-align:center;padding:30px;"><div><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div><div style="color:#e53935;">Ошибка: ' + e.message + '</div><div class="page-back-btn" style="margin-top:10px;" onclick="_orderBack(' + p.id + ')"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div></div>';
+    if (mc) mc.innerHTML = '<div style="text-align:center;padding:30px;"><div><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div><div style="color:#e53935;">Ошибка: ' + e.message + '</div><div class="page-back-btn" style="margin-top:10px;" onclick="_orderBack(' + p.id + ')"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div></div>';
   }
 }
 
@@ -490,8 +490,8 @@ function showMyOrders() {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).then(function(r){ return r.json(); }).then(function(orders) {
     if (!Array.isArray(orders)) orders = [];
-    var h = '<div class="page-back-btn" onclick="showCabinetPage()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
-      '<h2 class="section-title"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/orders.png?v=1" class="section-icon">Мои заказы (' + orders.length + ')</h2>';
+    var h = '<div class="page-back-btn" onclick="showCabinetPage()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+      '<h2 class="section-title"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/orders.png?v=1" class="section-icon">Мои заказы (' + orders.length + ')</h2>';
     if (orders.length === 0) {
       h += '<div style="text-align:center;padding:30px;opacity:0.7;">Заказов пока нет</div>';
     } else {
@@ -510,7 +510,7 @@ function showMyOrders() {
                 '<div style="font-size:11px;color:#888;margin-top:6px;">Подробнее →</div>' +
               '</div>' +
             '</div>' +
-            (o.track_number ? '<div style="font-size:13px;color:#4caf50;margin-top:8px;border-top:1px solid rgba(255,255,255,0.07);padding-top:8px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Трек: ' + escapeHTML(String(o.track_number)) + '</div>' : '') +
+            (o.track_number ? '<div style="font-size:13px;color:#4caf50;margin-top:8px;border-top:1px solid rgba(255,255,255,0.07);padding-top:8px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Трек: ' + escapeHTML(String(o.track_number)) + '</div>' : '') +
           '</div>';
       });
     }
@@ -534,7 +534,7 @@ function openOrderPage(orderId) {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).then(function(r){ return r.json(); }).then(function(data) {
     if (!Array.isArray(data) || data.length === 0) {
-      b.innerHTML = '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+      b.innerHTML = '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
         '<div style="text-align:center;padding:30px;color:#e53935;">Заказ не найден</div>';
       renderBottomNav(); return;
     }
@@ -562,11 +562,11 @@ function openOrderPage(orderId) {
     if (o.status === 'Ожидает реквизитов') {
       cancelBlock =
         '<div style="background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.35);border-radius:12px;padding:14px;margin-top:12px;font-size:13px;color:#ff9800;line-height:1.5;">'
-        + '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_warning.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Внимание! Не создавайте заказы без намерения оплатить. Система блокирует пользователей за частые неоплаченные заказы.'
+        + '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_warning.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Внимание! Не создавайте заказы без намерения оплатить. Система блокирует пользователей за частые неоплаченные заказы.'
         + '</div>'
         + '<button onclick="_cancelOrder(' + o.id + ')" '
           + 'style="margin-top:10px;width:100%;padding:12px;background:#000;color:#e53935;border:2px solid #e53935;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">'
-          + '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Отменить заказ</button>';
+          + '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_cancelled.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Отменить заказ</button>';
     }
 
     // Кнопка «Повторить заказ» — если отменён по таймеру (archived === false)
@@ -582,7 +582,7 @@ function openOrderPage(orderId) {
     // Плашка «Оплачен»
     var paidBanner = '';
     if (o.status === 'Оплачен') {
-      paidBanner = '<div style="background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#4caf50;line-height:1.5;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_paid.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Ваш заказ оплачен, ожидайте — в ближайшее время товар будет отправлен.</div>';
+      paidBanner = '<div style="background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#4caf50;line-height:1.5;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_paid.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Ваш заказ оплачен, ожидайте — в ближайшее время товар будет отправлен.</div>';
     }
 
     // Плашка «Отправлен» (п.5)
@@ -590,13 +590,13 @@ function openOrderPage(orderId) {
       if (o.delivery_type === '🚛 Доставка машиной поставщика') {
         paidBanner = '<div style="background:rgba(33,150,243,0.1);border:1px solid rgba(33,150,243,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#2196F3;line-height:1.5;">🚛 Товар отправлен машиной поставщика, с вами свяжутся для уточнения даты доставки.</div>';
       } else {
-        paidBanner = '<div style="background:rgba(33,150,243,0.1);border:1px solid rgba(33,150,243,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#2196F3;line-height:1.5;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Товар отправлен. Отслеживайте посылку по трек-номеру. При поступлении в пункт выдачи заберите в течение 3-х дней.</div>';
+        paidBanner = '<div style="background:rgba(33,150,243,0.1);border:1px solid rgba(33,150,243,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#2196F3;line-height:1.5;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_shipped.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Товар отправлен. Отслеживайте посылку по трек-номеру. При поступлении в пункт выдачи заберите в течение 3-х дней.</div>';
       }
     }
 
     // Плашка «Доставлен» (п.7)
     if (o.status === 'Доставлен') {
-      paidBanner = '<div style="background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#4caf50;line-height:1.5;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delivered.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Ваш товар доставлен в пункт выдачи. Можете забирать в часы работы ПВЗ.</div>';
+      paidBanner = '<div style="background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.4);border-radius:12px;padding:14px;margin-bottom:14px;font-size:14px;color:#4caf50;line-height:1.5;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_delivered.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Ваш товар доставлен в пункт выдачи. Можете забирать в часы работы ПВЗ.</div>';
     }
 
     // Блок: товар
@@ -604,16 +604,16 @@ function openOrderPage(orderId) {
       '<div style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.25);border-radius:12px;padding:14px;margin-bottom:14px;">' +
         '<div style="font-size:12px;color:#888;margin-bottom:4px;">Товар</div>' +
         '<div style="font-size:16px;font-weight:bold;color:#fff;line-height:1.35;margin-bottom:6px;">' + escapeHTML(o.product_title || '—') + '</div>' +
-        '<div style="font-size:22px;font-weight:800;color:#f5c96a;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(o.price || '—') + '</div>' +
+        '<div style="font-size:22px;font-weight:800;color:#f5c96a;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(o.price || '—') + '</div>' +
       '</div>';
 
     // Детали: получение, адрес, ФИО, телефон, оплата (без даты)
     var detailsRows =
       row('Получение', o.delivery_type === 'Самовывоз'
-        ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Самовывоз'
+        ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Самовывоз'
         : o.delivery_type === '🚛 Доставка машиной поставщика'
           ? '🚛 Доставка машиной поставщика'
-          : ('<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Доставка · ' + (o.delivery_type || '—')), null, true) +
+          : ('<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_tk.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Доставка · ' + (o.delivery_type || '—')), null, true) +
       (o.client_address && o.client_address !== 'Самовывоз' ? row('Адрес', o.client_address) : '') +
       row('Покупатель', o.client_name) +
       row('Телефон', o.client_phone) +
@@ -638,16 +638,16 @@ function openOrderPage(orderId) {
 
       requisitesBlock =
         '<div id="reqBlock" style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:14px;margin-top:12px;">' +
-          '<div style="font-size:13px;color:#d4af37;font-weight:700;margin-bottom:8px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_waiting.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Реквизиты для оплаты</div>' +
+          '<div style="font-size:13px;color:#d4af37;font-weight:700;margin-bottom:8px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_waiting.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Реквизиты для оплаты</div>' +
           '<div style="font-size:14px;color:#fff;line-height:1.6;">' + o.requisites + '</div>' +
           (copyText
-            ? '<button onclick="_copyRequisite(this,\'' + copyText.replace(/'/g, "\\'") + '\')" style="margin-top:10px;width:100%;padding:10px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_copy_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировать реквизиты</button>'
+            ? '<button onclick="_copyRequisite(this,\'' + copyText.replace(/'/g, "\\'") + '\')" style="margin-top:10px;width:100%;padding:10px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_copy_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировать реквизиты</button>'
             : '') +
           '<div id="orderTimer" style="text-align:center;margin-top:12px;font-size:22px;font-weight:800;color:#f5c96a;letter-spacing:2px;">--:--</div>' +
           '<div style="text-align:center;font-size:11px;color:#888;margin-bottom:10px;">Оплатите до истечения времени</div>' +
           '<div id="uploadReceiptWrap">' +
             '<label style="display:block;width:100%;padding:12px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;box-sizing:border-box;">' +
-              '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Загрузить чек' +
+              '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Загрузить чек' +
               '<input type="file" accept="application/pdf" style="display:none;" onchange="_uploadReceipt(this,' + o.id + ')">' +
             '</label>' +
           '</div>' +
@@ -667,7 +667,7 @@ function openOrderPage(orderId) {
     } else if (o.status === 'Проверка оплаты') {
       requisitesBlock =
         '<div style="background:rgba(33,150,243,0.08);border:1px solid rgba(33,150,243,0.3);border-radius:12px;padding:14px;margin-top:12px;font-size:14px;color:#2196F3;line-height:1.5;">' +
-          '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Чек получен. Ожидайте — выполняется проверка администратором.' +
+          '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Чек получен. Ожидайте — выполняется проверка администратором.' +
         '</div>';
     }
 
@@ -693,12 +693,12 @@ function openOrderPage(orderId) {
       var tkLabel = tkName ? escapeHTML(tkName) + ' · ' : '';
       trackBlock =
         '<div style="background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.3);border-radius:12px;padding:14px;margin-top:12px;">' +
-          '<div style="font-size:13px;color:#4caf50;font-weight:700;margin-bottom:6px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/orders.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;">Информация об отправке</div>' +
+          '<div style="font-size:13px;color:#4caf50;font-weight:700;margin-bottom:6px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/orders.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;">Информация об отправке</div>' +
           '<div style="font-size:15px;color:#fff;font-weight:bold;margin-bottom:10px;">' + tkLabel + escapeHTML(trackNum) + '</div>' +
           '<div style="display:flex;gap:8px;">' +
-            '<button onclick="_copyRequisite(this,\'' + trackNum.replace(/'/g, "\\\\''") + '\')" style="flex:1;padding:10px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_copy_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировать</button>' +
+            '<button onclick="_copyRequisite(this,\'' + trackNum.replace(/'/g, "\\\\''") + '\')" style="flex:1;padding:10px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_copy_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировать</button>' +
             (trackUrl
-              ? '<button onclick="window.open(\'' + trackUrl + '\',\'_blank\')" style="flex:1;padding:10px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/search.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Отследить</button>'
+              ? '<button onclick="window.open(\'' + trackUrl + '\',\'_blank\')" style="flex:1;padding:10px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:10px;font-weight:bold;cursor:pointer;font-size:13px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/search.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Отследить</button>'
               : '') +
           '</div>' +
         '</div>';
@@ -711,7 +711,7 @@ function openOrderPage(orderId) {
         '<button onclick="window.open(\'https://t.me/GARANT_VOENTORG\',\'_blank\')" ' +
           'style="margin-top:10px;width:100%;padding:12px;background:#000;color:#d4af37;' +
           'border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' +
-          '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"> Связаться с администратором</button>';
+          '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"> Связаться с администратором</button>';
     }
 
     // Кнопка «Подтвердить получение» (п.8)
@@ -721,11 +721,11 @@ function openOrderPage(orderId) {
         '<button onclick="_confirmDelivery(' + o.id + ')" ' +
           'style="margin-top:14px;width:100%;padding:14px;background:linear-gradient(135deg,#4caf50,#388e3c);' +
           'color:#fff;border:none;border-radius:12px;font-weight:bold;cursor:pointer;font-size:15px;">' +
-          '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_paid.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Подтвердить получение</button>';
+          '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_paid.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Подтвердить получение</button>';
     }
 
     b.innerHTML =
-      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
       '<h2 class="section-title">Заказ #' + o.id + '</h2>' +
       '<div style="margin:0 10px 20px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:16px;padding:16px;">' +
         statusBlock +
@@ -735,7 +735,7 @@ function openOrderPage(orderId) {
         '<div>' + detailsRows + '</div>' +
         (o.status === 'Получен'
           ? '<div style="background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.4);border-radius:12px;padding:18px;margin-top:14px;text-align:center;">' +
-              '<div style="margin-bottom:10px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div>' +
+              '<div style="margin-bottom:10px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_pickup.png?v=1" style="width:48px;height:48px;vertical-align:middle;"></div>' +
               '<div style="font-size:16px;font-weight:bold;color:#4caf50;margin-bottom:6px;">Благодарим вас за покупку!</div>' +
               '<div style="font-size:13px;color:#ccc;line-height:1.5;">Ваш заказ получен. Будем рады видеть вас снова!</div>' +
             '</div>'
@@ -750,7 +750,7 @@ function openOrderPage(orderId) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }).catch(function(e) {
     b.innerHTML =
-      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
       '<div style="text-align:center;padding:20px;color:#e53935;">Ошибка: ' + e.message + '</div>';
     renderBottomNav();
   });
@@ -768,7 +768,7 @@ function _cancelOrder(orderId) {
     // Считаем самостоятельно отменённые (archived=true) за последние 24ч
     if (currentTelegramId) {
       var since = new Date(Date.now() - 24*3600*1000).toISOString();
-      var CLIENTS_URL_LOCAL = 'https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients';
+      var CLIENTS_URL_LOCAL = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients';
       fetch(ORDERS_URL + '?select=id&telegram_id=eq.' + currentTelegramId + '&status=eq.Отменён&archived=eq.true&created_at=gte.' + since, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
       }).then(function(r){ return r.json(); }).then(function(selfCancelled) {
@@ -841,7 +841,7 @@ function _copyRequisite(btn, text) {
   var originalHTML = btn.innerHTML;
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function() {
-      btn.innerHTML = '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировано!';
+      btn.innerHTML = '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировано!';
       setTimeout(function() { btn.innerHTML = originalHTML; }, 2000);
     }).catch(function() { _copyFallback(btn, text, originalHTML); });
   } else {
@@ -857,7 +857,7 @@ function _copyFallback(btn, text, originalHTML) {
   ta.select(); ta.setSelectionRange(0, 99999);
   try {
     document.execCommand('copy');
-    btn.innerHTML = '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировано!';
+    btn.innerHTML = '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_ok.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Скопировано!';
     setTimeout(function() { btn.innerHTML = originalHTML; }, 2000);
   } catch(e) {}
   document.body.removeChild(ta);
@@ -916,7 +916,7 @@ function _orderTimerExpired(orderId) {
 
       // 3b. Считаем неоплаченные (archived=false) — если 3+ → постоянная блокировка
       if (currentTelegramId) {
-        var CLIENTS_URL_LOCAL = 'https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients';
+        var CLIENTS_URL_LOCAL = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients';
         fetch(ORDERS_URL + '?select=id&telegram_id=eq.' + currentTelegramId + '&status=eq.Отменён&archived=eq.false&limit=100', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         })
@@ -971,7 +971,7 @@ function _openExpiredOrderPage(orderId) {
     var sc = getOrderStatusColor(o.status), se = getOrderStatusEmoji(o.status);
 
     b.innerHTML =
-      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+      '<div class="page-back-btn" onclick="showMyOrders()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
       '<h2 class="section-title">Заказ #' + o.id + '</h2>' +
       '<div style="margin:0 10px 20px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:16px;padding:16px;">' +
         '<div style="text-align:center;margin-bottom:14px;">' +
@@ -983,7 +983,7 @@ function _openExpiredOrderPage(orderId) {
         '<div style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.25);border-radius:12px;padding:14px;margin-bottom:14px;">' +
           '<div style="font-size:12px;color:#888;margin-bottom:4px;">Товар</div>' +
           '<div style="font-size:16px;font-weight:bold;color:#fff;line-height:1.35;margin-bottom:6px;">' + escapeHTML(o.product_title || '—') + '</div>' +
-          '<div style="font-size:22px;font-weight:800;color:#f5c96a;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(o.price || '—') + '</div>' +
+          '<div style="font-size:22px;font-weight:800;color:#f5c96a;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:20px;height:20px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(o.price || '—') + '</div>' +
         '</div>' +
         '<button onclick="_repeatOrder(' + o.id + ')" ' +
           'style="width:100%;padding:14px;background:linear-gradient(135deg,#d4af37,#b8960c);' +
@@ -1050,8 +1050,8 @@ async function _uploadReceipt(input, orderId) {
   try {
     var ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
     var fn = 'receipt_' + orderId + '_' + Date.now() + '.' + ext;
-    var RECEIPTS_UPLOAD = 'https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/receipts';
-    var RECEIPTS_PUBLIC = 'https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/receipts';
+    var RECEIPTS_UPLOAD = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/receipts';
+    var RECEIPTS_PUBLIC = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/receipts';
     var fd = new FormData();
     fd.append('file', file);
     var ur = await fetch(RECEIPTS_UPLOAD + '/' + fn, {
@@ -1078,14 +1078,14 @@ async function _uploadReceipt(input, orderId) {
     if (wrap) wrap.innerHTML =
       '<div style="text-align:center;padding:8px;color:#e53935;">❌ Ошибка: ' + e.message + '</div>' +
       '<label style="display:block;width:100%;padding:12px;margin-top:8px;background:#000;color:#4caf50;border:2px solid #4caf50;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;box-sizing:border-box;">' +
-        '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Попробовать снова' +
+        '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_upload_new.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Попробовать снова' +
         '<input type="file" accept="application/pdf" style="display:none;" onchange="_uploadReceipt(this,' + orderId + ')">' +
       '</label>';
   }
 }
 
 function getOrderStatusEmoji(s) {
-  var base = 'https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/';
+  var base = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/';
   var icons = {
     'Ожидает реквизитов': 'ico_pending.png',
     'Ожидает оплаты': 'ico_waiting.png',
