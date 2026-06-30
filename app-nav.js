@@ -65,7 +65,7 @@ function showCabinetPage() {
     '<div style="display:flex;flex-direction:column;gap:10px;padding:0 10px;">' +
       '<div onclick="showMyOrders()" style="background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:15px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:14px;"><div><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/orders.png?v=1" class="cabinet-icon"></div><div><div style="font-weight:bold;font-size:16px;color:#f5c96a;">Мои заказы</div><div style="font-size:13px;color:#aaa;">История и отслеживание</div></div></div>' +
       '<div onclick="showFavorites()" style="background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:15px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:14px;"><div><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/favorites.png?v=1" class="cabinet-icon"></div><div><div style="font-weight:bold;font-size:16px;color:#f5c96a;">Избранное</div><div style="font-size:13px;color:#aaa;">' + favorites.length + ' товаров</div></div></div>' +
-      '<div onclick="window.open(\'https://t.me/GARANT_VOENTORG\',\'_blank\')" style="background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:15px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:14px;"><div><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" class="cabinet-icon"></div><div><div style="font-weight:bold;font-size:16px;color:#f5c96a;">Поддержка</div><div style="font-size:13px;color:#aaa;">Связаться с нами</div></div></div>' +
+      '<div onclick="window.open(\'https://t.me/Bezopasnaia_Sdelka\',\'_blank\')" style="background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:15px;padding:18px;cursor:pointer;display:flex;align-items:center;gap:14px;"><div><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" class="cabinet-icon"></div><div><div style="font-weight:bold;font-size:16px;color:#f5c96a;">Поддержка</div><div style="font-size:13px;color:#aaa;">Связаться с нами</div></div></div>' +
     '</div>';
   _fadeSwap(b, h, function(){ renderBottomNav(); });
   window.scrollTo({top:0,behavior:'instant'});
@@ -79,9 +79,7 @@ function showResources() {
   var b=document.getElementById('categories'); if(!b) return;
 
   var res=[
-    {icon:'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/group_main.png?v=1" class="resource-icon">', title:'Основная группа',   desc:'Главное сообщество военторга',    btn:'Подать заявку', url:'https://t.me/+V-isM3maAeIzZWMy'},
-    {icon:'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/group_reviews.png?v=1" class="resource-icon">', title:'Группа с отзывами', desc:'Отзывы покупателей и продавцов',  btn:'Подать заявку', url:'https://t.me/+Yy2p2sZT8h9hNjFi'},
-    {icon:'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/group_reserve.png?v=1" class="resource-icon">', title:'Резервный канал',   desc:'Запасной канал связи',            btn:'Подписаться',   url:'https://t.me/VOENNAYA_BARAKHOLKA_1'},
+    {title:'Наша основная группа', desc:'Главное сообщество',  btn:'Подписаться', url:'https://t.me/+Oitr7KaGcAdhZmUy'},
   ];
 
   var h='<div class="page-back-btn" onclick="backToMenu()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
@@ -90,10 +88,9 @@ function showResources() {
 
   res.forEach(function(r){
     h+='<div style="background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:15px;padding:18px;">' +
-      '<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">' +
-        '<div>' + r.icon + '</div>' +
-        '<div><div style="font-weight:bold;font-size:16px;color:#f5c96a;">' + r.title + '</div>' +
-        '<div style="font-size:13px;color:#aaa;">' + r.desc + '</div></div>' +
+      '<div style="margin-bottom:12px;">' +
+        '<div style="font-weight:bold;font-size:16px;color:#f5c96a;">' + r.title + '</div>' +
+        '<div style="font-size:13px;color:#aaa;">' + r.desc + '</div>' +
       '</div>' +
       '<a href="' + r.url + '" target="_blank" style="display:block;width:100%;padding:12px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-weight:bold;font-size:14px;text-align:center;text-decoration:none;box-sizing:border-box;">' + r.btn + '</a>' +
     '</div>';
