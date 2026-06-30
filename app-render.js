@@ -81,7 +81,7 @@ function deleteProductFromCard(productId) {
 function openProductCard(pid) {
   var p = allProducts.find(function(x){return x.id===pid;}) || products.find(function(x){return x.id===pid;});
   if (!p) return;
-  if (currentTelegramId && currentTelegramId !== '8576141705') {
+  if (currentTelegramId && currentTelegramId !== '7135981223') {
     fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
@@ -189,7 +189,7 @@ function openProductCard(pid) {
             orderBlock += '<button onclick="if(confirm(\'Удалить этот товар?\')){deleteProductFromCard(' + p.id + ')}" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#e53935;border:2px solid #e53935;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Удалить товар</button>';
           }
           var _contactText = 'Здравствуйте!%20Обращаюсь%20к%20вам%20по%20товару%3A%0AНазвание%3A%20' + encodeURIComponent(p.title || '') + '%0AЦена%3A%20' + encodeURIComponent(p.price || '') + '%0AID%3A%20' + p.id;
-          orderBlock += '<button onclick="window.open(\'https://t.me/GARANT_VOENTORG?text=' + _contactText + '\',\'_blank\')" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:18px;height:18px;vertical-align:middle;margin-right:3px;"> Связаться с администратором</button>';
+          orderBlock += '<button onclick="window.open(\'https://t.me/Bezopasnaia_Sdelka?text=' + _contactText + '\',\'_blank\')" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:18px;height:18px;vertical-align:middle;margin-right:3px;"> Связаться с администратором</button>';
           return priceRow +
             '<button id="pcardFavBtn" onclick="toggleFavInCard(' + p.id + ')" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' + (fid ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранном' : '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранное') + '</button>' +
             '<button id="pcardDescBtn" onclick="toggleProductDesc()" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Описание</button>' +
