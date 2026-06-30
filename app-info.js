@@ -23,8 +23,8 @@ function showInfo() {
 
 function renderAnnouncements(items, b) {
   var sw=document.getElementById('searchWrap'); if(sw) sw.style.display='none';
-  var h='<div class="page-back-btn" onclick="backToMenu()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
-    '<h2 style="text-align:center;color:#f5c96a;margin:10px 0;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1" class="section-icon">Объявления</h2>';
+  var h='<div class="page-back-btn" onclick="backToMenu()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+    '<h2 style="text-align:center;color:#f5c96a;margin:10px 0;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/announcements.png?v=1" class="section-icon">Объявления</h2>';
 
   if (items.length===0) {
     h+='<div style="text-align:center;padding:30px;opacity:0.7;">Нет объявлений</div>';
@@ -67,7 +67,7 @@ function bindInfoCardClicks() {
       } else {
         // Товар ещё не попал в allProducts — трекаем напрямую и открываем по id
         if (currentTelegramId && currentTelegramId !== '8576141705') {
-          fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/track', {
+          fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
             body: JSON.stringify({
@@ -94,10 +94,10 @@ function bindInfoCardClicks() {
   });
 }
 
-// Открытие объявления через overlay со slide-анимацией (как карточка товара)
+// Открытие объявления через модалку — реальный title, описание раскрыто, без цены
 function openInfoProduct(p) {
   if (currentTelegramId && currentTelegramId !== '8576141705') {
-    fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/track', {
+    fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
       body: JSON.stringify({
@@ -111,58 +111,43 @@ function openInfoProduct(p) {
   }
   var ph=getPhotosArray(p);
   var desc=(p.description||'').trim()||'Описание отсутствует';
+  var mc=document.getElementById('modalContent'), m=document.getElementById('modal');
+  if(!mc||!m) return;
 
   var phHTML='';
   if(ph.length>0){
-    phHTML='<div id="infoOvGallery" style="position:relative;margin-bottom:15px;">' +
-      '<img id="infoOvPhoto" src="'+ph[0]+'" style="width:100%;border-radius:15px;border:2px solid #d4af37;transition:opacity 0.22s ease;">' +
+    phHTML='<div style="position:relative;margin-bottom:15px;">' +
+      '<img id="infoModalPhoto" src="'+ph[0]+'" style="width:100%;border-radius:15px;transition:opacity 0.22s ease;">' +
       (ph.length>1
-        ?'<div id="infoOvDots" style="text-align:center;font-size:16px;color:#d4af37;margin-top:8px;">'+ph.map(function(_,i){return i===0?'●':'○';}).join(' ')+'</div>'
+        ?'<div id="infoModalDots" style="text-align:center;font-size:16px;color:#d4af37;margin-top:8px;">'+ph.map(function(_,i){return i===0?'●':'○';}).join(' ')+'</div>'
         :'') +
     '</div>';
   }
 
-  var overlay = document.getElementById('productCardOverlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'productCardOverlay';
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.62)),url(\'background.jpg.PNG\');background-size:cover;background-position:center;z-index:10000;overflow-y:auto;transform:translateX(100%);';
-    document.body.appendChild(overlay);
+  mc.innerHTML='<div style="padding:10px;">' +
+    '<h2 style="color:#f5c96a;font-size:18px;margin-bottom:12px;line-height:1.35;">'+escapeHTML(p.title||'')+'</h2>' +
+    phHTML +
+    '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;color:#ccc;font-size:14px;line-height:1.6;">'+escapeHTML(desc).replace(/\n/g,'<br>')+'</div>' +
+  '</div>';
+
+  // Стиль модалки объявлений: чёрный фон, золотая обводка, круглая ✕
+  var mBox = m.querySelector('div');
+  if (mBox) {
+    mBox.style.background    = '#0a0a0a';
+    mBox.style.border        = '2px solid #d4af37';
+    mBox.style.borderRadius  = '16px';
   }
-  overlay.style.transform = 'translateX(100%)';
-  overlay.innerHTML =
-    '<div id="pcardBack" class="page-back-btn"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
-    '<div style="margin:8px 10px 20px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:16px;padding:14px;">' +
-      '<h2 style="color:#f5c96a;font-size:18px;margin-bottom:12px;line-height:1.35;">'+escapeHTML(p.title||'')+'</h2>' +
-      phHTML +
-      '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;color:#ccc;font-size:14px;line-height:1.6;">'+escapeHTML(desc).replace(/\n/g,'<br>')+'</div>' +
-    '</div>';
-
-  overlay.scrollTop = 0;
-  overlay.classList.remove('card-slide-out', 'card-slide-in');
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      overlay.style.transform = '';
-      overlay.classList.add('card-slide-in');
-    });
-  });
-
-  document.getElementById('pcardBack').onclick = function() {
-    overlay.classList.remove('card-slide-in');
-    overlay.classList.add('card-slide-out');
-    setTimeout(function() {
-      overlay.style.transition = 'none';
-      overlay.classList.remove('card-slide-out');
-      overlay.innerHTML = '';
-      overlay.style.transform = 'translateX(100%)';
-      requestAnimationFrame(function() { overlay.style.transition = ''; });
-    }, 320);
-  };
+  var mClose = document.getElementById('closeModal');
+  if (mClose) {
+    mClose.innerHTML = '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/close_zoom.png?v=1" class="zoom-close-icon">';
+    mClose.style.cssText = 'position:absolute;right:14px;top:14px;width:32px;height:32px;border:none;border-radius:50%;background:transparent;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;';
+  }
+  m.style.display="block"; document.body.style.overflow="hidden";
+  document.getElementById('closeModal').onclick=function(){ m.style.display="none"; document.body.style.overflow=""; };
+  m.onclick=function(e){ if(e.target===m){m.style.display="none"; document.body.style.overflow="";} };
 
   if(ph.length>1){
-    var mp=document.getElementById('infoOvPhoto');
-    var md=document.getElementById('infoOvDots');
-    var cp=0, sx=0;
+    var mp=document.getElementById('infoModalPhoto'), md=document.getElementById('infoModalDots'), cp=0, sx=0;
     mp.addEventListener("touchstart",function(e){sx=e.touches[0].clientX;},{passive:true});
     mp.addEventListener("touchend",function(e){
       var diff=sx-e.changedTouches[0].clientX;
