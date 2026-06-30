@@ -41,14 +41,20 @@ document.addEventListener('click', function(e) {
 
 if (currentTelegramId && currentTelegramId !== '7135981223') {
   var tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
-  fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
+  // Прямая запись события в таблицу visits (вместо Edge Function track)
+  fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/visits', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY
+    },
     body: JSON.stringify({
       telegram_id: currentTelegramId,
       first_name: tgUser ? (tgUser.first_name || '') : '',
       username: tgUser ? (tgUser.username || '') : '',
-      event: 'visit'
+      event: 'visit',
+      created_at: new Date().toISOString()
     })
   }).catch(function(){});
 
