@@ -309,18 +309,6 @@ body::before {
 @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.05)} }
 
-/* ── Slide-анимация карточки товара (как на Wildberries) ── */
-#productCardOverlay {
-  transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-#productCardOverlay.card-slide-in {
-  transform: translateX(0);
-}
-#productCardOverlay.card-slide-out {
-  transform: translateX(100%);
-}
-
 /* Бейдж «📢 Объявление» в мини-карточке сетки (не цена, а тип) */
 .card-ann-badge {
   font-size: 11px;
