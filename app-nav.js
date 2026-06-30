@@ -79,7 +79,7 @@ function showResources() {
   var b=document.getElementById('categories'); if(!b) return;
 
   var res=[
-    {title:'Наша основная группа', desc:'Главное сообщество',  btn:'Подписаться', url:'https://t.me/+Oitr7KaGcAdhZmUy'},
+    {title:'Наша основная группа', desc:'Главное сообщество',  btn:'Подписаться', url:'https://t.me/voenntorgsvoi'},
   ];
 
   var h='<div class="page-back-btn" onclick="backToMenu()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
