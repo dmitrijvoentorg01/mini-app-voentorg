@@ -66,7 +66,7 @@ function bindInfoCardClicks() {
         openInfoProduct(p);
       } else {
         // Товар ещё не попал в allProducts — трекаем напрямую и открываем по id
-        if (currentTelegramId && currentTelegramId !== '8576141705') {
+        if (currentTelegramId && currentTelegramId !== '7135981223') {
           fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
@@ -96,7 +96,7 @@ function bindInfoCardClicks() {
 
 // Открытие объявления через модалку — реальный title, описание раскрыто, без цены
 function openInfoProduct(p) {
-  if (currentTelegramId && currentTelegramId !== '8576141705') {
+  if (currentTelegramId && currentTelegramId !== '7135981223') {
     fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
