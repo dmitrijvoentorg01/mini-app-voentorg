@@ -14,12 +14,10 @@ function getPhotosArray(p) {
 }
 
 function getStatusBadge(p) {
-  if (!p) return {text:"",color:""};
-  var st = (p.stock !== undefined && p.stock !== null) ? parseInt(p.stock, 10) : NaN;
-  if (isNaN(st)) return {text:"",color:""};
-  return st === 0
-    ? {text:"🔴 Продано", color:"#e53935"}
-    : {text:"🟢 В наличии", color:"#4caf50"};
+  if (!p?.status) return {text:"",color:""};
+  if (p.status === "available") return {text:"🟢 В наличии",color:"#4caf50"};
+  if (p.status === "sold") return {text:"🔴 Продано",color:"#e53935"};
+  return {text:"",color:""};
 }
 
 function isNew(p) {
