@@ -262,7 +262,7 @@ function _orderSelectOption(field, value) {
         '%0A%F0%9F%92%B0Цена: ' + encodeURIComponent(p.price || '') +
         '%0A%F0%9F%86%94ID: ' + p.id +
         '%0A%0AУточните по наличию%E2%9C%8D%F0%9F%8F%BB';
-      window.open('https://t.me/GARANT_VOENTORG?text=' + text, '_blank');
+      window.open('https://t.me/Bezopasnaia_Sdelka?text=' + text, '_blank');
       return;
     }
     _orderState.step = 2;
@@ -708,7 +708,7 @@ function openOrderPage(orderId) {
     var adminContactBlock = '';
     if (o.status !== 'Доставлен' && o.status !== 'Получен') {
       adminContactBlock =
-        '<button onclick="window.open(\'https://t.me/GARANT_VOENTORG\',\'_blank\')" ' +
+        '<button onclick="window.open(\'https://t.me/Bezopasnaia_Sdelka\',\'_blank\')" ' +
           'style="margin-top:10px;width:100%;padding:12px;background:#000;color:#d4af37;' +
           'border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' +
           '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"> Связаться с администратором</button>';
