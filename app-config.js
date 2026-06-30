@@ -1,11 +1,11 @@
 // === app-config.js — Константы и настройки ===
 
-const SUPABASE_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/products";
-const SUPABASE_KEY = "sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC";
-const SETTINGS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/settings";
-const ORDERS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/orders";
-const CLIENTS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/clients";
-const REVIEWS_URL = "https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/reviews";
+const SUPABASE_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/products";
+const SUPABASE_KEY = "sb_publishable_Fzk6Y9w1V3DOZ0Opn4m4lw_pynygFV8";
+const SETTINGS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/settings";
+const ORDERS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/orders";
+const CLIENTS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/clients";
+const REVIEWS_URL = "https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/reviews";
 
 var ADMIN_IDS = ["8576141705"];
 var perPage = 6;
