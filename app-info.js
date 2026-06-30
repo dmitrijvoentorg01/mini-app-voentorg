@@ -67,15 +67,20 @@ function bindInfoCardClicks() {
       } else {
         // Товар ещё не попал в allProducts — трекаем напрямую и открываем по id
         if (currentTelegramId && currentTelegramId !== '7135981223') {
-          fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
+          fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/visits', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_KEY
+            },
             body: JSON.stringify({
               telegram_id: currentTelegramId,
               first_name: '',
               username: '',
               event: 'product_view',
-              product_id: pid
+              product_id: pid,
+              created_at: new Date().toISOString()
             })
           }).catch(function(){});
         }
@@ -97,15 +102,20 @@ function bindInfoCardClicks() {
 // Открытие объявления через модалку — реальный title, описание раскрыто, без цены
 function openInfoProduct(p) {
   if (currentTelegramId && currentTelegramId !== '7135981223') {
-    fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
+    fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/visits', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      },
       body: JSON.stringify({
         telegram_id: currentTelegramId,
         first_name: '',
         username: '',
         event: 'product_view',
-        product_id: p.id
+        product_id: p.id,
+        created_at: new Date().toISOString()
       })
     }).catch(function(){});
   }
