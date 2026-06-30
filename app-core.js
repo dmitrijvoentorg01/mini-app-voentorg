@@ -41,7 +41,7 @@ document.addEventListener('click', function(e) {
 
 if (currentTelegramId && currentTelegramId !== '8576141705') {
   var tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
-  fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/track', {
+  fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
     body: JSON.stringify({
