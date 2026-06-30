@@ -28,31 +28,21 @@ function renderProductGridCard(p, eager = false) {
     var sb = getStatusBadge(p);
     var sl = sb.text ? '<div class="card-status" style="border:1px solid ' + sb.color + ';color:' + sb.color + ';">' + sb.text + '</div>' : '';
     var fid = isFav(p.id);
-    var fs = '<div class="fav-star" data-id="' + p.id + '">' + (fid ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;">' : '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;">') + '</div>';
+    var fs = '<div class="fav-star" data-id="' + p.id + '">' + (fid ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;">' : '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;">') + '</div>';
     var loadingAttr = eager ? 'eager' : 'lazy';
 
     // Для объявлений (isInfo): бейдж «📢 Объявление» вместо цены
     // Для товаров: показываем цену
     var priceRow = isInfo(p)
-      ? '<div class="card-ann-badge"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/announcements.png?v=1" style="width:14px;height:14px;vertical-align:middle;margin-right:3px;"> Объявление</div>'
+      ? '<div class="card-ann-badge"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/announcements.png?v=1" style="width:14px;height:14px;vertical-align:middle;margin-right:3px;"> Объявление</div>'
       : (p.price ? '<div class="card-price">' + escapeHTML(p.price) + '</div>' : '');
-
-    var isSold = !isInfo(p) && (p.stock !== undefined && p.stock !== null) && parseInt(p.stock, 10) === 0;
-    var soldOverlay = isSold
-      ? '<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:5;display:flex;align-items:center;justify-content:center;border-radius:10px;">' +
-          '<svg width="60%" height="60%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
-            '<line x1="10" y1="10" x2="90" y2="90" stroke="rgba(255,80,80,0.9)" stroke-width="8" stroke-linecap="round"/>' +
-            '<line x1="90" y1="10" x2="10" y2="90" stroke="rgba(255,80,80,0.9)" stroke-width="8" stroke-linecap="round"/>' +
-          '</svg>' +
-        '</div>'
-      : '';
 
     var html = '<div class="product-grid-card" data-id="' + p.id + '" style="cursor:pointer;">' +
       '<div class="card-photo-container" style="position:relative;touch-action:pan-y;border:1px solid rgba(212,175,55,0.3);border-radius:10px;overflow:hidden;">' +
         (ph.length > 0
-          ? '<img src="' + pr + '" class="card-photo" data-photos="' + encodeURIComponent(JSON.stringify(ph)) + '" loading="' + loadingAttr + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" style="width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.22s ease;"><div style="display:none;align-items:center;justify-content:center;height:100%;color:#888;font-size:12px;position:absolute;top:0;left:0;width:100%;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1" style="width:20px;height:20px;vertical-align:middle;"></div>'
-          : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;font-size:12px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1" style="width:20px;height:20px;vertical-align:middle;"></div>') +
-        soldOverlay + nb + fs +
+          ? '<img src="' + pr + '" class="card-photo" data-photos="' + encodeURIComponent(JSON.stringify(ph)) + '" loading="' + loadingAttr + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" style="width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.22s ease;"><div style="display:none;align-items:center;justify-content:center;height:100%;color:#888;font-size:12px;position:absolute;top:0;left:0;width:100%;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1" style="width:20px;height:20px;vertical-align:middle;"></div>'
+          : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;font-size:12px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_photo.png?v=1" style="width:20px;height:20px;vertical-align:middle;"></div>') +
+        nb + fs +
         (ph.length > 1 ? '<div class="card-dots" style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:3;">' + ph.map(function(_,i){return '<span style="width:5px;height:5px;border-radius:50%;background:' + (i===0?'#f5c96a':'rgba(255,255,255,0.5)') + ';transition:background 0.2s;"></span>';}).join('') + '</div>' : '') +
       '</div>' +
       '<div class="card-info">' + priceRow + '<div class="card-title">' + escapeHTML(p.title || "") + '</div>' + sl + '</div>' +
@@ -69,8 +59,8 @@ function renderProductGridCard(p, eager = false) {
 //  КАРТОЧКА ТОВАРА — ОТДЕЛЬНАЯ СТРАНИЦА (п.1, 2, 5, 6)
 // ─────────────────────────────────────────────────────────────────
 function deleteProductFromCard(productId) {
-  var SUPABASE_URL_PRODUCTS = 'https://nkbrclrbubhxnmzbubvs.supabase.co/rest/v1/products';
-  var SUPABASE_KEY = 'sb_publishable_2ISu7FbAWtVXCa1qoxwbhg_ih7X56VC';
+  var SUPABASE_URL_PRODUCTS = 'https://wwhpxpxflkbrlhbarqmx.supabase.co/rest/v1/products';
+  var SUPABASE_KEY = 'sb_publishable_Fzk6Y9w1V3DOZ0Opn4m4lw_pynygFV8';
   // Удаляем из избранного
   var idx = favorites.indexOf(productId);
   if (idx !== -1) {
@@ -92,7 +82,7 @@ function openProductCard(pid) {
   var p = allProducts.find(function(x){return x.id===pid;}) || products.find(function(x){return x.id===pid;});
   if (!p) return;
   if (currentTelegramId && currentTelegramId !== '8576141705') {
-    fetch('https://nkbrclrbubhxnmzbubvs.supabase.co/functions/v1/track', {
+    fetch('https://wwhpxpxflkbrlhbarqmx.supabase.co/functions/v1/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_KEY },
       body: JSON.stringify({
@@ -122,6 +112,8 @@ function openProductCard(pid) {
   _cardPhotoIdx = 0;
 
   currentView = 'product_card';
+  hideBanner();
+  var sw = document.getElementById('searchWrap'); if (sw) sw.style.display = 'none';
   var b = document.getElementById('categories'); if (!b) return;
 
   // Сохраняем текущий HTML страницы
@@ -162,87 +154,81 @@ function openProductCard(pid) {
   if (!overlay) {
     overlay = document.createElement('div');
     overlay.id = 'productCardOverlay';
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.62)),url(\'background.jpg.PNG\');background-size:cover;background-position:center;z-index:10000;overflow-y:auto;transform:translateX(100%);';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.62)),url(\'background.jpg.PNG\');background-size:cover;background-position:center;z-index:10000;overflow-y:auto;opacity:0;transition:opacity 0.15s ease;';
     document.body.appendChild(overlay);
   }
-  overlay.style.transform = 'translateX(100%)';
+  overlay.style.opacity = '0';
+  overlay.style.display = 'block';
   overlay.innerHTML =
-    '<div id="pcardBack" class="page-back-btn"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+    '<div id="pcardBack" class="page-back-btn"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
     '<div style="margin:8px 10px 20px;background:rgba(0,0,0,0.6);border:2px solid #d4af37;border-radius:16px;padding:14px;">' +
       photoHTML +
       '<div style="margin-top:14px;">' +
         '<h2 style="font-size:18px;font-weight:bold;color:#fff;margin-bottom:8px;line-height:1.35;">' + escapeHTML(p.title || '') + '</h2>' +
+        statusHTML +
         // Цена + плашка наличия в одну строку
         (function(){
           var st = (p.stock !== undefined && p.stock !== null) ? parseInt(p.stock, 10) : 1;
           if (isNaN(st)) st = 1;
           var badge = st === 0
-            ? '<span id="pcardStockBadge" style="font-size:12px;font-weight:700;color:#e53935;border:1px solid #e53935;border-radius:6px;padding:2px 8px;">Продано</span>'
-            : '<span id="pcardStockBadge" style="font-size:12px;font-weight:700;color:#4caf50;border:1px solid #4caf50;border-radius:6px;padding:2px 8px;">В наличии</span>';
+            ? '<span style="font-size:12px;font-weight:700;color:#e53935;border:1px solid #e53935;border-radius:6px;padding:2px 8px;">Продано</span>'
+            : '<span style="font-size:12px;font-weight:700;color:#4caf50;border:1px solid #4caf50;border-radius:6px;padding:2px 8px;">В наличии</span>';
           var priceRow = '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">' +
-            '<span style="font-size:24px;font-weight:800;color:#f5c96a;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:26px;height:26px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(p.price || '') + '</span>' +
+            '<span style="font-size:24px;font-weight:800;color:#f5c96a;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/price.png?v=1" style="width:26px;height:26px;vertical-align:middle;margin-right:2px;"> ' + escapeHTML(p.price || '') + '</span>' +
             '<span style="color:#888;font-size:14px;">|</span>' +
             badge +
             '</div>';
           // Кнопка Заказать
           var orderBlock = '';
           if (st === 0) {
-            orderBlock = '<button id="pcardOrderBtn" disabled style="width:100%;padding:15px;background:#333;color:#666;border:none;border-radius:12px;font-weight:bold;font-size:16px;cursor:not-allowed;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/cart.png?v=1" style="width:20px;height:20px;vertical-align:middle;"> Заказать</button>';
+            orderBlock = '<button disabled style="width:100%;padding:15px;background:#333;color:#666;border:none;border-radius:12px;font-weight:bold;font-size:16px;cursor:not-allowed;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/cart.png?v=1" style="width:20px;height:20px;vertical-align:middle;"> Заказать</button>';
           } else {
-            orderBlock = '<button id="pcardOrderBtn" onclick="openOrderForm(' + p.id + ',1)" style="width:100%;padding:15px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/cart.png?v=1" style="width:20px;height:20px;vertical-align:middle;"> Заказать</button>';
+            orderBlock = '<button onclick="openOrderForm(' + p.id + ',1)" style="width:100%;padding:15px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/cart.png?v=1" style="width:20px;height:20px;vertical-align:middle;"> Заказать</button>';
           }
           if (isAdmin) {
-            orderBlock += '<button onclick="if(confirm(\'Удалить этот товар?\')){deleteProductFromCard(' + p.id + ')}" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#e53935;border:2px solid #e53935;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Удалить товар</button>';
-            orderBlock += '<div style="margin-top:12px;background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:12px;">' +
-              '<div style="font-size:11px;color:#d4af37;font-weight:700;margin-bottom:8px;letter-spacing:1px;">КОЛИЧЕСТВО НА СКЛАДЕ</div>' +
-              '<div style="display:flex;align-items:center;gap:10px;">' +
-                '<button onclick="adminStockChange(-1,' + p.id + ')" style="width:40px;height:40px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-size:22px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">−</button>' +
-                '<div id="adminStockVal" style="flex:1;text-align:center;font-size:22px;font-weight:800;color:#fff;">' + st + '</div>' +
-                '<button onclick="adminStockChange(+1,' + p.id + ')" style="width:40px;height:40px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-size:22px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">+</button>' +
-                '<button id="adminStockSaveBtn" onclick="adminStockSave(' + p.id + ')" style="padding:0 16px;height:40px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;">Сохранить</button>' +
-              '</div>' +
-            '</div>';
+            orderBlock += '<button onclick="if(confirm(\'Удалить этот товар?\')){deleteProductFromCard(' + p.id + ')}" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#e53935;border:2px solid #e53935;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_delete.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Удалить товар</button>';
           }
           var _contactText = 'Здравствуйте!%20Обращаюсь%20к%20вам%20по%20товару%3A%0AНазвание%3A%20' + encodeURIComponent(p.title || '') + '%0AЦена%3A%20' + encodeURIComponent(p.price || '') + '%0AID%3A%20' + p.id;
-          orderBlock += '<button onclick="window.open(\'https://t.me/GARANT_VOENTORG?text=' + _contactText + '\',\'_blank\')" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:18px;height:18px;vertical-align:middle;margin-right:3px;"> Связаться с администратором</button>';
+          orderBlock += '<button onclick="window.open(\'https://t.me/GARANT_VOENTORG?text=' + _contactText + '\',\'_blank\')" style="width:100%;padding:12px;margin-top:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/support.png?v=1" style="width:18px;height:18px;vertical-align:middle;margin-right:3px;"> Связаться с администратором</button>';
           return priceRow +
-            '<button id="pcardFavBtn" onclick="toggleFavInCard(' + p.id + ')" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' + (fid ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранном' : '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранное') + '</button>' +
-            '<button id="pcardDescBtn" onclick="toggleProductDesc()" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Описание</button>' +
+            '<button id="pcardFavBtn" onclick="toggleFavInCard(' + p.id + ')" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' + (fid ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранном' : '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранное') + '</button>' +
+            '<button id="pcardDescBtn" onclick="toggleProductDesc()" style="width:100%;padding:12px;margin-bottom:8px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;text-align:center;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Описание</button>' +
             '<div id="pcardDesc" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:10px;color:#ccc;font-size:14px;line-height:1.6;">' + escapeHTML(desc).replace(/\n/g,'<br>') + '</div>' +
             orderBlock;
         })() +
       '</div>' +
     '</div>';
 
+  renderBottomNav();
   overlay.scrollTop = 0;
-  // Slide-in анимация (как на Wildberries): выезжает справа
-  overlay.classList.remove('card-slide-out', 'card-slide-in');
+  // Плавное появление overlay после вставки контента
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
-      overlay.style.transform = '';
-      overlay.classList.add('card-slide-in');
+      overlay.style.opacity = '1';
     });
   });
 
-  // Кнопка «Назад»: slide-out вправо, затем скрываем overlay
+  // Скрываем кнопку возврата из категории пока открыта карточка товара
+  var _catBackBtn = document.getElementById('catBackBtn');
+  if (_catBackBtn) _catBackBtn.style.display = 'none';
+
+  // Кнопка «Назад»: просто скрываем overlay, страница уже под ним
   document.getElementById('pcardBack').onclick = function() {
     var m = document.getElementById('modal');
     if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
-    overlay.classList.remove('card-slide-in');
-    overlay.classList.add('card-slide-out');
-    setTimeout(function() {
-      // Сбрасываем без анимации — убираем transition на момент сброса
-      overlay.style.transition = 'none';
-      overlay.classList.remove('card-slide-out');
-      overlay.innerHTML = '';
-      overlay.style.transform = 'translateX(100%)';
-      // Возвращаем transition через следующий кадр
-      requestAnimationFrame(function() { overlay.style.transition = ''; });
-      currentView = _prevView;
-      renderBottomNav();
-      if (_prevCategory !== 'all') { var cb = document.getElementById('catBackBtn'); if (cb) cb.style.display = ''; }
-      window.scrollTo({top:_prevScrollY, behavior:'instant'});
-    }, 320);
+    overlay.style.display = 'none';
+    overlay.innerHTML = '';
+    currentView = _prevView;
+    var swR = document.getElementById('searchWrap');
+    if (_prevView === 'new_items' || _prevView === 'popular' || _prevView === 'favorites') {
+      if (swR) swR.style.display = 'none';
+    } else {
+      if (swR) swR.style.display = '';
+    }
+    if (_prevView === 'categories') { showBanner(); }
+    renderBottomNav();
+    if (_prevCategory !== 'all') { var cb = document.getElementById('catBackBtn'); if (cb) cb.style.display = ''; }
+    window.scrollTo({top:_prevScrollY,behavior:'instant'});
   };
 
   // Галерея: свайп + точки + зум
@@ -306,14 +292,14 @@ function toggleProductDesc() {
   if (!d) return;
   var open = d.style.display !== 'none';
   d.style.display = open ? 'none' : 'block';
-  if (btn) btn.innerHTML = open ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Описание' : '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Скрыть описание';
+  if (btn) btn.innerHTML = open ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Описание' : '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/description.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> Скрыть описание';
 }
 
 // Избранное в карточке (п.2)
 function toggleFavInCard(pid) {
   toggleFav(pid);
   var btn = document.getElementById('pcardFavBtn');
-  if (btn) btn.innerHTML = isFav(pid) ? '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранном' : '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранное';
+  if (btn) btn.innerHTML = isFav(pid) ? '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранном' : '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;"> В избранное';
   updateFavStar(pid);
 }
 
@@ -338,7 +324,7 @@ function openPhotoZoom(pid, startIdx) {
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
 
   overlay.innerHTML =
-    '<button id="zoomClose" style="position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:rgba(255,255,255,0.15);color:#fff;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/close_zoom.png?v=1" class="zoom-close-icon"></button>' +
+    '<button id="zoomClose" style="position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:rgba(255,255,255,0.15);color:#fff;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/close_zoom.png?v=1" class="zoom-close-icon"></button>' +
     '<div id="zoomStage" style="width:100%;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;max-height:80vh;position:relative;">' +
       '<img id="zoomImg" src="' + ph[ci] + '" style="max-width:100%;max-height:80vh;object-fit:contain;touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform;">' +
     '</div>' +
@@ -535,20 +521,20 @@ function renderMainPage() {
 // Иконки категорий — константа уровня модуля, создаётся один раз
 // ─────────────────────────────────────────────────────────────────
 var _CHIP_ICONS = {
-  "Оптика / Прицелы":               "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_optics.png?v=1",
-  "Квадрокоптеры / FPV / БПЛА":     "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_quadcopter.png?v=1",
-  "НСУ / Ретрансляторы":            "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_nsu.png?v=1",
-  "Комплектующие для БПЛА":         "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_parts.png?v=1",
-  "Электростанции / Генераторы":    "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_generator.png?v=1",
-  "Броня / Экипировка":             "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_armor.png?v=1",
-  "Мото / Квадроциклы":             "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_moto.png?v=1",
-  "Усилители сигнала / Инкубаторы": "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_signal.png?v=1",
-  "Рации":                          "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_radio.png?v=1",
-  "Детекторы БПЛА":                 "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_detector.png?v=1",
-  "РЭБ":                            "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_reb.png?v=1",
-  "Гаджеты":                        "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_gadget.png?v=1",
-  "Смартчасы":                      "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_watch.png?v=1",
-  "Спутниковый интернет":           "https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/category_satellite.png?v=1"
+  "Оптика / Прицелы":               "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_optics.png?v=1",
+  "Квадрокоптеры / FPV / БПЛА":     "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_quadcopter.png?v=1",
+  "НСУ / Ретрансляторы":            "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_nsu.png?v=1",
+  "Комплектующие для БПЛА":         "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_parts.png?v=1",
+  "Электростанции / Генераторы":    "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_generator.png?v=1",
+  "Броня / Экипировка":             "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_armor.png?v=1",
+  "Мото / Квадроциклы":             "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_moto.png?v=1",
+  "Усилители сигнала / Инкубаторы": "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_signal.png?v=1",
+  "Рации":                          "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_radio.png?v=1",
+  "Детекторы БПЛА":                 "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_detector.png?v=1",
+  "РЭБ":                            "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_reb.png?v=1",
+  "Гаджеты":                        "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_gadget.png?v=1",
+  "Смартчасы":                      "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_watch.png?v=1",
+  "Спутниковый интернет":           "https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/category_satellite.png?v=1"
 };
 
 function _renderGrid() {
@@ -574,7 +560,7 @@ function _renderGrid() {
   currentProducts.slice(0, perPage).forEach(function(p, i){ h += renderProductGridCard(p, i < 6); });
   h += '</div>';
   if (currentProducts.length > perPage) {
-    h += '<div id="showMoreContainer" style="text-align:center;padding:10px;"><button id="showMoreBtn" onclick="loadMore()" style="width:100%;padding:14px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (currentProducts.length-perPage) + ')</button></div>';
+    h += '<div id="showMoreContainer" style="text-align:center;padding:10px;"><button id="showMoreBtn" onclick="loadMore()" style="width:100%;padding:14px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (currentProducts.length-perPage) + ')</button></div>';
   }
 
   _fadeSwap(b, h, function() {
@@ -624,7 +610,7 @@ function _renderGridRestored(loadedCount) {
   currentProducts.slice(0, count).forEach(function(p){ h += renderProductGridCard(p); });
   h += '</div>';
   if (currentProducts.length > count) {
-    h += '<div id="showMoreContainer" style="text-align:center;padding:10px;"><button id="showMoreBtn" onclick="loadMore()" style="width:100%;padding:14px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (currentProducts.length-count) + ')</button></div>';
+    h += '<div id="showMoreContainer" style="text-align:center;padding:10px;"><button id="showMoreBtn" onclick="loadMore()" style="width:100%;padding:14px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:16px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (currentProducts.length-count) + ')</button></div>';
   }
 
   // currentPage выставляем так, чтобы следующий loadMore() взял правильный offset
@@ -680,7 +666,7 @@ function loadMore() {
   var g=document.getElementById('productsGrid'); if(!g) return;
   for(var i=st;i<en;i++) g.insertAdjacentHTML('beforeend', renderProductGridCard(currentProducts[i]));
   if(en>=currentProducts.length){ var c=document.getElementById('showMoreContainer'); if(c) c.remove(); }
-  else { var btn=document.getElementById('showMoreBtn'); if(btn) btn.innerHTML='<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё ('+(currentProducts.length-en)+')'; }
+  else { var btn=document.getElementById('showMoreBtn'); if(btn) btn.innerHTML='<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё ('+(currentProducts.length-en)+')'; }
   requestAnimationFrame(function(){ setupPhotoSwipe(); bindCardClicks(); });
 }
 
@@ -757,7 +743,7 @@ function bindCardClicks(c) {
 function updateFavStar(pid) {
   var fid=isFav(pid);
   document.querySelectorAll('.fav-star[data-id="'+pid+'"]').forEach(function(el){
-    el.innerHTML=fid?'<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;">':'<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;">'; el.style.color=fid?'#f5c96a':'rgba(255,255,255,0.5)';
+    el.innerHTML=fid?'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_filled.png?v=1" style="width:18px;height:18px;vertical-align:middle;">':'<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/star_empty.png?v=1" style="width:18px;height:18px;vertical-align:middle;">'; el.style.color=fid?'#f5c96a':'rgba(255,255,255,0.5)';
   });
   saveFavs();
 }
@@ -780,7 +766,7 @@ function _syncBackBtn() {
   btn.id = 'catBackBtn';
   btn.onclick = goHome;
   btn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;margin:10px 12px 4px;cursor:pointer;';
-  btn.innerHTML = '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon">';
+  btn.innerHTML = '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon">';
   wrap.parentNode.insertBefore(btn, wrap);
 }
 
@@ -857,80 +843,3 @@ document.addEventListener('touchstart', function(e) {
   _navObserver.observe(document.body, { childList: true, subtree: true });
   document.addEventListener('DOMContentLoaded', _bindSearchNavEvents);
 })();
-// ─────────────────────────────────────────────────────────────────
-//  АДМИН: управление количеством прямо в карточке товара
-// ─────────────────────────────────────────────────────────────────
-function adminStockChange(delta, pid) {
-  var el = document.getElementById('adminStockVal');
-  if (!el) return;
-  var cur = parseInt(el.textContent, 10);
-  if (isNaN(cur)) cur = 0;
-  var next = Math.max(0, cur + delta);
-  el.textContent = next;
-}
-
-function adminStockSave(pid) {
-  var el = document.getElementById('adminStockVal');
-  var btn = document.getElementById('adminStockSaveBtn');
-  if (!el) return;
-  var newStock = parseInt(el.textContent, 10);
-  if (isNaN(newStock) || newStock < 0) return;
-
-  // Блокируем кнопку на время запроса
-  if (btn) { btn.textContent = '...'; btn.disabled = true; }
-
-  fetch(SUPABASE_URL + '?id=eq.' + pid, {
-    method: 'PATCH',
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify({ stock: newStock })
-  })
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-
-    // Обновляем локальный объект чтобы при повторном открытии было актуально
-    var prod = allProducts.find(function(x){ return x.id === pid; });
-    if (prod) prod.stock = newStock;
-    var prod2 = products.find(function(x){ return x.id === pid; });
-    if (prod2) prod2.stock = newStock;
-
-    // Обновляем бейдж и кнопку «Заказать» без перезагрузки карточки
-    var badge = document.getElementById('pcardStockBadge');
-    if (badge) {
-      badge.textContent = newStock === 0 ? 'Продано' : 'В наличии';
-      badge.style.color  = newStock === 0 ? '#e53935' : '#4caf50';
-      badge.style.borderColor = newStock === 0 ? '#e53935' : '#4caf50';
-    }
-    var orderBtn = document.getElementById('pcardOrderBtn');
-    if (orderBtn) {
-      if (newStock === 0) {
-        orderBtn.disabled = true;
-        orderBtn.style.background = '#333';
-        orderBtn.style.color = '#666';
-        orderBtn.style.border = 'none';
-        orderBtn.style.cursor = 'not-allowed';
-      } else {
-        orderBtn.disabled = false;
-        orderBtn.style.background = '#000';
-        orderBtn.style.color = '#d4af37';
-        orderBtn.style.border = '2px solid #d4af37';
-        orderBtn.style.cursor = 'pointer';
-      }
-    }
-
-    if (btn) { btn.textContent = '✓ Сохранено'; btn.style.color = '#4caf50'; btn.style.borderColor = '#4caf50'; }
-    setTimeout(function() {
-      if (btn) { btn.textContent = 'Сохранить'; btn.disabled = false; btn.style.color = '#d4af37'; btn.style.borderColor = '#d4af37'; }
-    }, 2000);
-  })
-  .catch(function(e) {
-    if (btn) { btn.textContent = 'Ошибка'; btn.style.color = '#e53935'; btn.style.borderColor = '#e53935'; }
-    setTimeout(function() {
-      if (btn) { btn.textContent = 'Сохранить'; btn.disabled = false; btn.style.color = '#d4af37'; btn.style.borderColor = '#d4af37'; }
-    }, 2000);
-  });
-}
