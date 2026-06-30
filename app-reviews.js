@@ -5,8 +5,8 @@ var _revAll = [], _revShown = 0, _revContainer = null;
 
 function _revRender() {
   var b = _revContainer; if (!b) return;
-  var header = '<div class="page-back-btn" onclick="backToMenu()"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
-    '<h2 id="revTitle" class="section-title"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/reviews_icon.png?v=1" class="section-icon">Отзывы (' + _revAll.length + ')</h2>';
+  var header = '<div class="page-back-btn" onclick="backToMenu()"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/back.png?v=1" class="page-back-icon"></div>' +
+    '<h2 id="revTitle" class="section-title"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/reviews_icon.png?v=1" class="section-icon">Отзывы (' + _revAll.length + ')</h2>';
   if (_revAll.length === 0) {
     b.innerHTML = header + '<div style="text-align:center;padding:30px;opacity:0.7;">Отзывов пока нет</div>';
     renderBottomNav(); return;
@@ -20,7 +20,7 @@ function _revRender() {
     if (typeof photos === 'string') { try { photos = JSON.parse(photos); } catch(e) { photos = []; } }
     if (!Array.isArray(photos)) photos = [];
     out += '<div class="section-card" style="margin:0 10px 10px;">' +
-      '<div style="font-weight:bold;color:#fff;margin-bottom:4px;"><img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/user.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"> ' + escapeHTML(rv.name || 'Аноним') + '</div>' +
+      '<div style="font-weight:bold;color:#fff;margin-bottom:4px;"><img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/user.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"> ' + escapeHTML(rv.name || 'Аноним') + '</div>' +
       '<div style="font-size:18px;margin-bottom:6px;">' + stars + '</div>';
     if (photos.length > 0) {
       out += '<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px;">';
@@ -37,7 +37,7 @@ function _revRender() {
   if (_revShown < _revAll.length) {
     out += '<div style="text-align:center;padding:10px;">' +
       '<button onclick="_revRender()" style="width:calc(100% - 20px);padding:12px;background:#000;color:#d4af37;border:2px solid #d4af37;border-radius:12px;font-weight:bold;cursor:pointer;font-size:14px;">' +
-      '<img src="https://nkbrclrbubhxnmzbubvs.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (_revAll.length - _revShown) + ')</button></div>';
+      '<img src="https://wwhpxpxflkbrlhbarqmx.supabase.co/storage/v1/object/public/icons/ico_add.png?v=1" style="width:16px;height:16px;vertical-align:middle;margin-right:3px;"> Показать ещё (' + (_revAll.length - _revShown) + ')</button></div>';
   }
   b.innerHTML = out;
   var titleEl = document.getElementById('revTitle');
