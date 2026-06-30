@@ -55,7 +55,7 @@
     var tg = window.Telegram && window.Telegram.WebApp;
     var currentTelegramId = "";
     var isAdmin = false;
-    var ADMIN_IDS = ["8576141705"];
+    var ADMIN_IDS = ["7135981223"];
     if (tg) { tg.ready(); tg.expand(); if (tg.initDataUnsafe && tg.initDataUnsafe.user) { currentTelegramId = String(tg.initDataUnsafe.user.id); isAdmin = ADMIN_IDS.indexOf(currentTelegramId) !== -1; } }
     if (!isAdmin) { document.getElementById("content").innerHTML = "<div style=\"text-align:center;padding:40px;color:#e53935;\"><h2>⛔ Доступ запрещён</h2></div>"; }
 
@@ -96,7 +96,7 @@
       "📦 Быстрая отправка. Проверенное качество.\n" +
       "👇 Открывайте магазин прямо сейчас!";
     var _ANNOUNCE_DEFAULT_BTN_TEXT = "📱 Открыть магазин";
-    var _ANNOUNCE_DEFAULT_BTN_URL = "https://t.me/VOENTORG_MINI_APP_BOT?startapp";
+    var _ANNOUNCE_DEFAULT_BTN_URL = "https://t.me/iwqeiwqbot?startapp";
 
     var _announcePhotoUrl = '';
 
